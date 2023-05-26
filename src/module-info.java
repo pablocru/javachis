@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author pabcrudel
+ *
+ */
+module myproject {
+}
