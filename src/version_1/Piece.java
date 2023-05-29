@@ -5,9 +5,9 @@ public class Piece {
 	private Box position;
 	private boolean isInFinalBox=false;
 	
-	public Piece(int id) {
+	public Piece(int id, Box position) {
 		this.id=id;
-//		this.position=new HomeBox();
+		this.position = position;
 	}
 	
 }

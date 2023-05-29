@@ -1,7 +1,5 @@
 package version_1;
 
-import version_1.Piece;
-
 public class Player {
 	private String color;
 	private String name;
@@ -11,8 +9,8 @@ public class Player {
 	public Player(String color, String name) {
 		this.color = color;
 		this.name = name;
-		this.piece = new Piece(1);
-		this.home=new HomeBox(this);
+		this.home = new HomeBox(this);
+		this.piece = new Piece(1, this.home);
 	}
 	
 	
