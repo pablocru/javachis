@@ -4,6 +4,7 @@ public class Game {
 	private Player [] players;
 	private Box [] boxes;
 	private Box [] homeBoxes;
+	private Turn turn;
 
 
 	public Game(int numberOfPlayers) {
@@ -13,6 +14,8 @@ public class Game {
 		this.createBoxes();
 		
 		this.createHomeBoxes();
+		
+		this.createTurn();
 		
 	}
 
@@ -51,6 +54,10 @@ public class Game {
 				boxes[i]=new Box(i);
 			}
 		}
+	}
+	
+	private void createTurn() {
+		this.turn = new Turn(this.players);
 	}
 
 	public Player[] getPlayers() {
