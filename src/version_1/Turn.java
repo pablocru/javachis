@@ -6,7 +6,10 @@ public class Turn {
 	private Player owner;
 	
 	public Turn(Player[] players) {
-		this.turnOrder = players;
+		for (int i = 0; i < players.length; i++) {
+			Player player = players[i];
+			if (player.getName() != null) this.turnOrder[i] = player;
+		}
 		this.turnOwner = 0;
 		this.owner = this.turnOrder[this.turnOwner];
 	}
