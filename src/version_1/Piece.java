@@ -9,5 +9,21 @@ public class Piece {
 		this.id=id;
 		this.position = position;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public Box getPosition() {
+		return position;
+	}
+
+	public boolean isInFinalBox() {
+		return isInFinalBox;
+	}
+
+	public void setPosition(Box position) {
+		this.position = position;
+	}
 	
 }

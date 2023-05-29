@@ -10,6 +10,11 @@ public class Box {
 	public Box(int boxNumber) {
 		this.boxNumber = boxNumber;
 	}
+
+
+	public int getBoxNumber() {
+		return boxNumber;
+	}
 	
 	
 	

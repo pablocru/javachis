@@ -32,6 +32,18 @@ public class Player {
 	public HomeBox getHome() {
 		return home;
 	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Piece getPiece() {
+		return piece;
+	}
 	
 	
 }

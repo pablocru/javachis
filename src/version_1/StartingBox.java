@@ -6,6 +6,14 @@ public class StartingBox extends Box{
 	public StartingBox(int boxNumber) {
 		super(boxNumber);
 	}
+
+	public int getTimesPassed() {
+		return timesPassed;
+	}
+
+	public void setTimesPassed(int timesPassed) {
+		this.timesPassed = timesPassed;
+	}
 	
 	
 }
