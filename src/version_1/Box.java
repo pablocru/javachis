@@ -1,7 +1,5 @@
 package version_1;
 
-import version_1.Piece;
-
 public class Box {
 	private int boxNumber;
 //	private Piece firstPiece = null;

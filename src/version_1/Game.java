@@ -1,8 +1,5 @@
 package version_1;
 
-import version_1.Piece;
-import version_1.Player;
-
 public class Game {
 	private Player [] players;
 	private Box [] boxes;
