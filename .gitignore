@@ -1,58 +1,72 @@
-.metadata
+# Ignore Eclipse metadata
+.metadata/
+
+# Ignore compiled binary files
 bin/
+
+# Ignore temporary files
 tmp/
 *.tmp
 *.bak
 *.swp
 *~.nib
+
+# Ignore Java class files
 *.class
+
+# Ignore local.properties file (used by some build tools)
 local.properties
+
+# Ignore Eclipse project settings
 .settings/
+
+# Ignore Eclipse loadpath file
 .loadpath
+
+# Ignore Eclipse recommenders file
 .recommenders
 
-# External tool builders
+# Ignore external tool builders
 .externalToolBuilders/
 
-# Locally stored "Eclipse launch configurations"
+# Ignore locally stored Eclipse launch configurations
 *.launch
 
-# PyDev specific (Python IDE for Eclipse)
+# Ignore PyDev specific files (Python IDE for Eclipse)
 *.pydevproject
 
-# CDT-specific (C/C++ Development Tooling)
+# Ignore CDT-specific files (C/C++ Development Tooling)
 .cproject
-
-# CDT- autotools
 .autotools
 
-# Java annotation processor (APT)
+# Ignore Java annotation processor (APT) file
 .factorypath
 
-# PDT-specific (PHP Development Tools)
+# Ignore PDT-specific files (PHP Development Tools)
 .buildpath
 
-# sbteclipse plugin
+# Ignore sbteclipse plugin target folder
 .target
 
-# Tern plugin
+# Ignore Tern plugin configuration file
 .tern-project
 
-# TeXlipse plugin
+# Ignore TeXlipse plugin configuration
 .texlipse
 
-# STS (Spring Tool Suite)
+# Ignore STS (Spring Tool Suite) configuration
 .springBeans
 
-# Code Recommenders
+# Ignore Code Recommenders files
 .recommenders/
 
-# Annotation Processing
+# Ignore generated files by annotation processing
 .apt_generated/
 .apt_generated_test/
 
-# Scala IDE specific (Scala & Java development for Eclipse)
+# Ignore Scala IDE specific files (Scala & Java development for Eclipse)
 .cache-main
 .scala_dependencies
 .worksheet
+
 
