@@ -7,7 +7,7 @@ public class Piece {
 	
 	public Piece(int id) {
 		this.id=id;
-		this.position=new HomeBox();
+//		this.position=new HomeBox();
 	}
 	
 }

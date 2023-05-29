@@ -5,12 +5,14 @@ import version_1.Piece;
 public class Player {
 	private String color;
 	private String name;
-	private Piece playerPiecespieces[];
+	private Piece piece;
+	private HomeBox home;
 	
-	public Player(String color, String name, Piece[] playerPiecespieces) {
+	public Player(String color, String name) {
 		this.color = color;
 		this.name = name;
-		this.playerPiecespieces = playerPiecespieces;
+		this.piece = new Piece(1);
+		this.home=new HomeBox(this);
 	}
 	
 	
