@@ -5,28 +5,22 @@ public class Player {
 	private String color;
 	private String name;
 	private Piece [] pieces;
-	private HomeBox home;
 	private int startingBox;
 	
 //	Constructors
 	public Player(String color, String name, int startingBox) {
 		this.color = color;
 		this.name = name;
-		this.home = new HomeBox(this.pieces);
 		this.startingBox = startingBox;
 		this.setPieces();
 	}
 
 //	Setters
 	public void setPieces() {
-		this.pieces[0] = new Piece(1, this.home);
+		this.pieces[0] = new Piece(1, 0);
 	}
 	
 //	Getters
-	public HomeBox getHome() {
-		return home;
-	}
-
 	public String getColor() {
 		return color;
 	}
@@ -48,12 +42,22 @@ public class Player {
 		Piece piece = null;
 		
 		for (int i = 0; lock && i < pieces.length; i++) {			
-			if (pieces[i].getPosition() instanceof HomeBox) {
+			if (pieces[i].getPosition() == 0) {
 				piece = pieces[i];
 				lock = false;
 			}
 		}
 		
 		return piece;
+	}
+	
+//	Methods
+	public boolean isAnyoneHome() {
+		boolean isInHome = false;
+		
+		for (int i = 0; !isInHome && i < this.pieces.length; i++)
+			if (pieces[i].getPosition() == 0) isInHome = true;
+		
+		return isInHome;		
 	}
 }

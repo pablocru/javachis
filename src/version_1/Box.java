@@ -18,10 +18,4 @@ public class Box {
 	public int getBoxNumber() {
 		return boxNumber;
 	}
-	
-//	Methods
-	public void movePiece(Box destination) {
-		destination.firstPiece = this.firstPiece;
-		this.firstPiece = null;
-	}
 }

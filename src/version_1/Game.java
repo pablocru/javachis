@@ -73,15 +73,17 @@ public class Game {
 		this.turnOwner = (this.turnOwner + 1) % 4;
 	}
 	
-	private void movePiece(int positionNumber) {
-//		Piece piece = owner.getPieceFromHome();
+	private void startPieceMove(Piece piece, int position) {
+		
 	}
 	
 	public void initiateTurn() {
 		int dice = rollDice();
 		
-//		if (dice == 5 && owner.getHome().isAnyoneHome()) {
-//			movePiece(owner.getStartingBox());
-//		}
+		Player owner = this.players[this.turnOwner];
+		
+		if (dice == 5 && owner.isAnyoneHome()) {
+			startPieceMove(owner.getPieceFromHome(), owner.getStartingBox());
+		}
 	}
 }

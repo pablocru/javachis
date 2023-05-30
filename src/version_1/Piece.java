@@ -3,17 +3,17 @@ package version_1;
 public class Piece {
 //	Attributes
 	private int id;
-	private Box position;
+	private int position;
 	private boolean isInFinalBox=false;
 	
 //	Constructors
-	public Piece(int id, Box position) {
+	public Piece(int id, int position) {
 		this.id=id;
 		this.position = position;
 	}
 
 //	Setters
-	public void setPosition(Box position) {
+	public void setPosition(int position) {
 		this.position = position;
 	}
 	
@@ -22,7 +22,7 @@ public class Piece {
 		return id;
 	}
 
-	public Box getPosition() {
+	public int getPosition() {
 		return position;
 	}
 
