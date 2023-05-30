@@ -6,6 +6,7 @@ public class Box {
 //	private Piece secondPiece = null;
 //	private boolean isThereBridge = false;
 	
+	public Box() {}
 	
 	public Box(int boxNumber) {
 		this.boxNumber = boxNumber;
