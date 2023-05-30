@@ -1,29 +1,34 @@
 package version_1;
 
 public class Piece {
+//	Attributes
 	private int id;
-	private Box position;
+	private int position;
 	private boolean isInFinalBox=false;
 	
-	public Piece(int id, Box position) {
+//	Constructors
+	public Piece(int id, int position) {
 		this.id=id;
 		this.position = position;
 	}
 
+//	Setters
+	public void setPosition(int position) {
+		this.position = position;
+	}
+	
+//	Getters
 	public int getId() {
 		return id;
 	}
 
-	public Box getPosition() {
+	public int getPosition() {
 		return position;
 	}
 
+//	Methods
 	public boolean isInFinalBox() {
 		return isInFinalBox;
-	}
-
-	public void setPosition(Box position) {
-		this.position = position;
 	}
 	
 }

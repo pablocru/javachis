@@ -1,47 +1,52 @@
 package version_1;
 
+import java.util.Random;
+
 public class Game {
+//	Attributes
+	private static final int RED_STARTING_BOX = 1;
+	private static final int YELLOW_STARTING_BOX = 21;
+	private static final int GREEN_STARTING_BOX = 41;
+	private static final int BLUE_STARTING_BOX = 61;
 	private Player [] players;
+	private int turnOwner;
 	private Box [] boxes;
-	private Box [] homeBoxes;
-	private Turn turn;
 
-
+//	Constructors
 	public Game(int numberOfPlayers) {
 		
 		this.createPlayers(numberOfPlayers);
 
 		this.createBoxes();
 		
-		this.createHomeBoxes();
-		
 		this.createTurn();
-		
 	}
 
-	private void createPlayers(int numberOfPlayers) {
-		this.players[0] = new Player ("red", "Player 1");
-		
-		this.players[1] = new Player ("yellow", "Player 2");
+//	Getters
+	public Player[] getPlayers() {
+		return players;
+	}
 
-		this.players[2] = new Player();
-		if (numberOfPlayers > 2) {
-			this.players[2].setColor("green");
-			this.players[2].setName("Player 3");
-			this.players[2].setPiece();
-		}
-		
-		this.players[3] = new Player();
-		if (numberOfPlayers > 3) {
-			this.players[3].setColor("blue");
-			this.players[3].setName("Player 4");
-			this.players[3].setPiece();
-		}
+	public Box[] getBoxes() {
+		return boxes;
 	}
 	
-	private void createHomeBoxes() {
-		for(int i = 0; i < players.length; i++) {
-			homeBoxes[i] = players[i].getHome();
+	public int getTurnOwner() {
+		return turnOwner;
+	}
+
+//	Methods
+	private void createPlayers(int numberOfPlayers) {
+		this.players[0] = new Player ("red", "Player 1", RED_STARTING_BOX);
+		
+		this.players[1] = new Player ("yellow", "Player 2", YELLOW_STARTING_BOX);
+
+		if (numberOfPlayers > 2) {
+			this.players[2] = new Player("green", "Player 3", GREEN_STARTING_BOX);
+		}
+		
+		if (numberOfPlayers > 3) {
+			this.players[3] = new Player("blue", "Player 4", BLUE_STARTING_BOX);
 		}
 	}
 	
@@ -57,19 +62,28 @@ public class Game {
 	}
 	
 	private void createTurn() {
-		this.turn = new Turn(this.players);
+		this.turnOwner = 0;
 	}
-
-	public Player[] getPlayers() {
-		return players;
+	
+	private int rollDice() {
+		return new Random().nextInt(7);
 	}
-
-	public Box[] getBoxes() {
-		return boxes;
+	
+	private void switchOwner() {
+		this.turnOwner = (this.turnOwner + 1) % 4;
 	}
-
-	public Box[] getHomeBoxes() {
-		return homeBoxes;
+	
+	private void startPieceMove(Piece piece, int position) {
+		
 	}
-
+	
+	public void initiateTurn() {
+		int dice = rollDice();
+		
+		Player owner = this.players[this.turnOwner];
+		
+		if (dice == 5 && owner.isAnyoneHome()) {
+			startPieceMove(owner.getPieceFromHome(), owner.getStartingBox());
+		}
+	}
 }

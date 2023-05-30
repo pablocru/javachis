@@ -1,38 +1,26 @@
 package version_1;
 
 public class Player {
+//	Attributes
 	private String color;
 	private String name;
-	private Piece piece;
-	private HomeBox home;
+	private Piece [] pieces;
+	private int startingBox;
 	
-	public Player() {
-		this.home = new HomeBox(this);
-	}
-	
-	public Player(String color, String name) {
+//	Constructors
+	public Player(String color, String name, int startingBox) {
 		this.color = color;
 		this.name = name;
-		this.home = new HomeBox(this);
-		this.setPiece();
+		this.startingBox = startingBox;
+		this.setPieces();
 	}
 
-	public void setColor(String color) {
-		this.color = color;
+//	Setters
+	public void setPieces() {
+		this.pieces[0] = new Piece(1, 0);
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setPiece() {
-		this.piece = new Piece(1, this.home);
-	}
-
-	public HomeBox getHome() {
-		return home;
-	}
-
+	
+//	Getters
 	public String getColor() {
 		return color;
 	}
@@ -40,10 +28,36 @@ public class Player {
 	public String getName() {
 		return name;
 	}
+	
+	public int getStartingBox() {
+		return this.startingBox;
+	}
 
-	public Piece getPiece() {
+	public Piece [] getPieces() {
+		return pieces;
+	}
+	
+	public Piece getPieceFromHome() {
+		boolean lock = true;
+		Piece piece = null;
+		
+		for (int i = 0; lock && i < pieces.length; i++) {			
+			if (pieces[i].getPosition() == 0) {
+				piece = pieces[i];
+				lock = false;
+			}
+		}
+		
 		return piece;
 	}
 	
-	
+//	Methods
+	public boolean isAnyoneHome() {
+		boolean isInHome = false;
+		
+		for (int i = 0; !isInHome && i < this.pieces.length; i++)
+			if (pieces[i].getPosition() == 0) isInHome = true;
+		
+		return isInHome;		
+	}
 }
