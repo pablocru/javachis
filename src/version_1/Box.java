@@ -12,11 +12,8 @@ public class Box {
 		this.boxNumber = boxNumber;
 	}
 
-
 	public int getBoxNumber() {
 		return boxNumber;
 	}
-	
-	
 	
 }
