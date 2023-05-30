@@ -7,7 +7,7 @@ public class HomeBox extends Box{
 		this.howManyPieces = howManyPieces;
 	}
 	
-	public boolean anyoneHome() {
+	public boolean isAnyoneHome() {
 		return howManyPieces != null && howManyPieces.length > 0;
 	}
 }
