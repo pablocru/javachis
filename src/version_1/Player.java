@@ -3,18 +3,18 @@ package version_1;
 public class Player {
 	private String color;
 	private String name;
-	private Piece piece;
+	private Piece [] pieces;
 	private HomeBox home;
 	
 	public Player() {
-		this.home = new HomeBox(this);
+		this.home = new HomeBox();
 	}
 	
 	public Player(String color, String name) {
 		this.color = color;
 		this.name = name;
-		this.home = new HomeBox(this);
-		this.setPiece();
+		this.home = new HomeBox(this.pieces);
+		this.setPieces();
 	}
 
 	public void setColor(String color) {
@@ -25,8 +25,8 @@ public class Player {
 		this.name = name;
 	}
 
-	public void setPiece() {
-		this.piece = new Piece(1, this.home);
+	public void setPieces() {
+		this.pieces[0] = new Piece(1, this.home);
 	}
 
 	public HomeBox getHome() {
@@ -41,8 +41,8 @@ public class Player {
 		return name;
 	}
 
-	public Piece getPiece() {
-		return piece;
+	public Piece [] getPieces() {
+		return pieces;
 	}
 	
 	
