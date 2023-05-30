@@ -2,15 +2,15 @@ package version_1;
 
 public class HomeBox extends Box{
 //	Attributes
-	private Piece [] howManyPieces;
+	private Piece [] pieces;
 
 //	Constructors
 	public HomeBox(Piece [] howManyPieces) {
-		this.howManyPieces = howManyPieces;
+		this.pieces = howManyPieces;
 	}
 	
 //	Methods
 	public boolean isAnyoneHome() {
-		return howManyPieces != null && howManyPieces.length > 0;
+		return pieces != null && pieces.length > 0;
 	}
 }
