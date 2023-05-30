@@ -1,5 +1,7 @@
 package version_1;
 
+import java.util.Random;
+
 public class Turn {
 	private Player turnOrder[];
 	private int turnOwner;
@@ -22,4 +24,11 @@ public class Turn {
 		return turnOwner;
 	}
 	
+	private int rollDice() {
+		return new Random().nextInt(7);
+	}
+	
+	private void switchOwner() {
+		this.turnOwner = (this.turnOwner + 1) % 4;
+	}
 }
