@@ -3,7 +3,6 @@ package version_1;
 public class Game {
 	private Player [] players;
 	private Box [] boxes;
-	private Box [] homeBoxes;
 	private Turn turn;
 
 
@@ -12,8 +11,6 @@ public class Game {
 		this.createPlayers(numberOfPlayers);
 
 		this.createBoxes();
-		
-		this.createHomeBoxes();
 		
 		this.createTurn();
 		
@@ -24,24 +21,12 @@ public class Game {
 		
 		this.players[1] = new Player ("yellow", "Player 2");
 
-		this.players[2] = new Player();
 		if (numberOfPlayers > 2) {
-			this.players[2].setColor("green");
-			this.players[2].setName("Player 3");
-			this.players[2].setPieces();
+			this.players[2] = new Player("green", "Player 3");
 		}
 		
-		this.players[3] = new Player();
 		if (numberOfPlayers > 3) {
-			this.players[3].setColor("blue");
-			this.players[3].setName("Player 4");
-			this.players[3].setPieces();
-		}
-	}
-	
-	private void createHomeBoxes() {
-		for(int i = 0; i < players.length; i++) {
-			homeBoxes[i] = players[i].getHome();
+			this.players[3] = new Player("blue", "Player 4");
 		}
 	}
 	
@@ -66,10 +51,6 @@ public class Game {
 
 	public Box[] getBoxes() {
 		return boxes;
-	}
-
-	public Box[] getHomeBoxes() {
-		return homeBoxes;
 	}
 
 }

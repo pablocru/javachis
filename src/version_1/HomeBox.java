@@ -2,8 +2,6 @@ package version_1;
 
 public class HomeBox extends Box{
 	private Piece [] howManyPieces;
-	
-	public HomeBox() {}
 
 	public HomeBox(Piece [] howManyPieces) {
 		this.howManyPieces = howManyPieces;
