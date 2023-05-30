@@ -3,6 +3,7 @@ package version_1;
 import java.util.Random;
 
 public class Game {
+//	Attributes
 	private static final int RED_STARTING_BOX = 1;
 	private static final int YELLOW_STARTING_BOX = 21;
 	private static final int GREEN_STARTING_BOX = 41;
@@ -11,7 +12,7 @@ public class Game {
 	private int turnOwner;
 	private Box [] boxes;
 
-
+//	Constructors
 	public Game(int numberOfPlayers) {
 		
 		this.createPlayers(numberOfPlayers);
@@ -21,6 +22,20 @@ public class Game {
 		this.createTurn();
 	}
 
+//	Getters
+	public Player[] getPlayers() {
+		return players;
+	}
+
+	public Box[] getBoxes() {
+		return boxes;
+	}
+	
+	public int getTurnOwner() {
+		return turnOwner;
+	}
+
+//	Methods
 	private void createPlayers(int numberOfPlayers) {
 		this.players[0] = new Player ("red", "Player 1", RED_STARTING_BOX);
 		
@@ -69,17 +84,4 @@ public class Game {
 //			movePiece(owner.getStartingBox());
 //		}
 	}
-
-	public Player[] getPlayers() {
-		return players;
-	}
-
-	public Box[] getBoxes() {
-		return boxes;
-	}
-	
-	public int getTurnOwner() {
-		return turnOwner;
-	}
-
 }

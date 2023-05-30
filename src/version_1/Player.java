@@ -1,12 +1,14 @@
 package version_1;
 
 public class Player {
+//	Attributes
 	private String color;
 	private String name;
 	private Piece [] pieces;
 	private HomeBox home;
 	private int startingBox;
 	
+//	Constructors
 	public Player(String color, String name, int startingBox) {
 		this.color = color;
 		this.name = name;
@@ -15,10 +17,12 @@ public class Player {
 		this.setPieces();
 	}
 
+//	Setters
 	public void setPieces() {
 		this.pieces[0] = new Piece(1, this.home);
 	}
-
+	
+//	Getters
 	public HomeBox getHome() {
 		return home;
 	}
