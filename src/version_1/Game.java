@@ -28,14 +28,14 @@ public class Game {
 		if (numberOfPlayers > 2) {
 			this.players[2].setColor("green");
 			this.players[2].setName("Player 3");
-			this.players[2].setPiece();
+			this.players[2].setPieces();
 		}
 		
 		this.players[3] = new Player();
 		if (numberOfPlayers > 3) {
 			this.players[3].setColor("blue");
 			this.players[3].setName("Player 4");
-			this.players[3].setPiece();
+			this.players[3].setPieces();
 		}
 	}
 	
