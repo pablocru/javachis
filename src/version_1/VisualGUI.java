@@ -9,11 +9,21 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Color;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
 
 public class VisualGUI extends JFrame {
 
 	private JPanel contentPane;
-
+	Point referenciaCasillas1A20;
+	Point referenciaCasillas21A40;
+	Point referenciaCasillas41A60;
+	Point referenciaCasillas61A80;
+	JPanel ficha = new JPanel();
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -46,31 +56,49 @@ public class VisualGUI extends JFrame {
 		panel.setBounds(15, 15, 900, 900);
 		contentPane.add(panel);
 		panel.setLayout(null);
+		ficha.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(Color.RED);
-		panel_2.setBounds(12, 146, 28, 27);
-		panel.add(panel_2);
-		panel_2.setLayout(null);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(986, 81, 400, 42);
-		contentPane.add(panel_1);
-		panel_1.setLayout(null);
+		ficha.setBackground(Color.RED);
+		ficha.setBounds(570, 146, 28, 28);
+		panel.add(ficha);
+		ficha.setLayout(null);
 		
 		//Escrito por MA
-		Point abajoIzquierda = panel.getLocation(); //para coger las coordenadas del panel
-		Point casilla80 = panel.getLocation(); 	//primero cogemos las coordenadas del pane
-		casilla80.setLocation(casilla80.getX()+1, casilla80.getY()+4);		//luego las editamos
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(986, 135, 400, 30);
-		contentPane.add(lblNewLabel);
 		
-		lblNewLabel.setText(casilla80.toString()); //para cambiar el texto del label de arriba y que me diga las coordenadas
-		Point ficha = panel_2.getLocation();
-		ficha.setLocation(40,146);
-		panel_2.setLocation(ficha.getLocation());
+		//estas dos de abajo se meten en un bucle y cada vez que se da al boton se iteran
+		referenciaCasillas61A80=ficha.getLocation();
+//		ficha.setLocation((int)referenciaCasillas61A80.getX(), (int)referenciaCasillas61A80.getY());
+		
+		referenciaCasillas61A80.setLocation(570, 146);//Empezar aqui el Jueves
+		
+		JLabel coordenadas = new JLabel("New label");
+		coordenadas.setBounds(986, 135, 400, 30);
+		contentPane.add(coordenadas);
+		coordenadas.setText(referenciaCasillas61A80.toString()); //para cambiar el texto del label de arriba y que me diga las coordenadas
+		
+		JLabel muestraIteracion = new JLabel("61");
+		muestraIteracion.setBounds(1129, 201, 100, 17);
+		contentPane.add(muestraIteracion);
+		
+		JButton botonIterar = new JButton("New button");
+		botonIterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				muestraIteracion.setText(String.valueOf(Integer.parseInt(muestraIteracion.getText())+1));
+				referenciaCasillas61A80=ficha.getLocation();
+				ficha.setLocation((int)referenciaCasillas61A80.getX()-29, (int)referenciaCasillas61A80.getY());
+				coordenadas.setText(referenciaCasillas61A80.toString());
+			}
+		});
+		botonIterar.setBounds(986, 196, 105, 27);
+		contentPane.add(botonIterar);
+		
+		
+		
+		
+		
+		
 		
 	}
 }
