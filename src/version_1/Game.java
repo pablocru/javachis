@@ -84,9 +84,7 @@ public class Game {
 		
 		Player owner = this.players[this.turnOwner];
 		
-		if (dice == 5 && owner.isAnyoneHome()) {
-			owner.getPieceFromHome().setPosition(owner.getStartingBox());
-		}
+		if (dice == 5 && owner.isAnyoneHome()) owner.getPieceFromHome().setPosition(owner.getStartingBox());
 		else owner.getPieces()[0].setPosition(dice);
 		
 		this.switchOwner();
