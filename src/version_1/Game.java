@@ -70,7 +70,7 @@ public class Game {
 	}
 	
 	private void switchOwner() {
-		this.turnOwner = (this.turnOwner + 1) % 4;
+		this.turnOwner = (this.turnOwner + 1) % players.length;
 	}
 	
 	public void initiateTurn() {
