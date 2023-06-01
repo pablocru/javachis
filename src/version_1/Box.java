@@ -11,11 +11,17 @@ public class Box {
 	public Box() {}
 	
 	public Box(int boxNumber) {
-		this.boxNumber = boxNumber;
+		this.boxNumber = ++boxNumber;
 	}
 
 //	Setters
 	public int getBoxNumber() {
 		return boxNumber;
+	}
+	
+//	Methods
+	@Override
+	public String toString() {
+		return "Box [boxNumber: " + boxNumber + ", firstPiece: " + firstPiece + "]";
 	}
 }
