@@ -81,5 +81,7 @@ public class Game {
 		if (dice == 5 && owner.isAnyoneHome()) {
 			owner.getPieceFromHome().setPosition(owner.getStartingBox());
 		}
+		
+		this.switchOwner();
 	}
 }
