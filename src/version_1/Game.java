@@ -1,5 +1,6 @@
 package version_1;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
@@ -56,7 +57,7 @@ public class Game {
 	private void createBoxes() {
 		this.boxes = new Box[TOTAL_BOXES];
 		
-		for (int i=1;i<TOTAL_BOXES; i++) {
+		for (int i=0;i<TOTAL_BOXES; i++) {
 			if (i==RED_STARTING_BOX||i==YELLOW_STARTING_BOX||i==GREEN_STARTING_BOX||i==BLUE_STARTING_BOX) {
 				boxes[i]=new StartingBox(i);
 			}
@@ -89,5 +90,11 @@ public class Game {
 		else owner.getPieces()[0].setPosition(dice);
 		
 		this.switchOwner();
+	}
+
+	@Override
+	public String toString() {
+		return "Game [players: " + Arrays.toString(players) + ", turnOwner: " + turnOwner + ", boxes: "
+				+ Arrays.toString(boxes) + "]";
 	}
 }
