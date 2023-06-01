@@ -4,7 +4,7 @@ public class Player {
 //	Attributes
 	private String color;
 	private String name;
-	private Piece [] pieces;
+	private Piece [] pieces = new Piece[1];
 	private int startingBox;
 	
 //	Constructors

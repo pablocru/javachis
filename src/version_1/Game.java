@@ -8,6 +8,7 @@ public class Game {
 	private static final int YELLOW_STARTING_BOX = 21;
 	private static final int GREEN_STARTING_BOX = 41;
 	private static final int BLUE_STARTING_BOX = 61;
+	private static final int TOTAL_BOXES = 80;
 	private Player [] players;
 	private int turnOwner;
 	private Box [] boxes;
@@ -37,6 +38,8 @@ public class Game {
 
 //	Methods
 	private void createPlayers(int numberOfPlayers) {
+		this.players = new Player[numberOfPlayers];
+		
 		this.players[0] = new Player ("red", "Player 1", RED_STARTING_BOX);
 		
 		this.players[1] = new Player ("yellow", "Player 2", YELLOW_STARTING_BOX);
@@ -51,7 +54,9 @@ public class Game {
 	}
 	
 	private void createBoxes() {
-		for (int i=1;i<=80; i++) {
+		this.boxes = new Box[TOTAL_BOXES];
+		
+		for (int i=1;i<TOTAL_BOXES; i++) {
 			if (i==RED_STARTING_BOX||i==YELLOW_STARTING_BOX||i==GREEN_STARTING_BOX||i==BLUE_STARTING_BOX) {
 				boxes[i]=new StartingBox(i);
 			}
@@ -81,6 +86,7 @@ public class Game {
 		if (dice == 5 && owner.isAnyoneHome()) {
 			owner.getPieceFromHome().setPosition(owner.getStartingBox());
 		}
+		else owner.getPieces()[0].setPosition(dice);
 		
 		this.switchOwner();
 	}
