@@ -68,33 +68,68 @@ public class VisualGUI extends JFrame {
 		
 		
 		//estas dos de abajo se meten en un bucle y cada vez que se da al boton se iteran
+		referenciaCasillas1A20=ficha.getLocation();
+		referenciaCasillas21A40=ficha.getLocation();
+		referenciaCasillas41A60=ficha.getLocation();
 		referenciaCasillas61A80=ficha.getLocation();
 //		ficha.setLocation((int)referenciaCasillas61A80.getX(), (int)referenciaCasillas61A80.getY());
 		
-		referenciaCasillas61A80.setLocation(570, 146);//Empezar aqui el Jueves
 		
+		referenciaCasillas1A20.setLocation(100,300);
+		referenciaCasillas21A40.setLocation(300, 750);
+		referenciaCasillas41A60.setLocation(700,567);
+		referenciaCasillas61A80.setLocation(570, 146);
+
 		JLabel coordenadas = new JLabel("New label");
 		coordenadas.setBounds(986, 135, 400, 30);
 		contentPane.add(coordenadas);
 		coordenadas.setText(referenciaCasillas61A80.toString()); //para cambiar el texto del label de arriba y que me diga las coordenadas
 		
-		JLabel muestraIteracion = new JLabel("61");
+		JLabel muestraIteracion = new JLabel("61"); //NO SE BORRA, SI NO SE PIERDE LA ITERACION
 		muestraIteracion.setBounds(1129, 201, 100, 17);
 		contentPane.add(muestraIteracion);
 		
 		JButton botonIterar = new JButton("New button");
 		botonIterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				muestraIteracion.setText(String.valueOf(Integer.parseInt(muestraIteracion.getText())+1));
-				referenciaCasillas61A80=ficha.getLocation();
-				ficha.setLocation((int)referenciaCasillas61A80.getX()-29, (int)referenciaCasillas61A80.getY());
-				coordenadas.setText(referenciaCasillas61A80.toString());
+				boolean in=true;
+				while (in) {
+
+					muestraIteracion.setText(String.valueOf(Integer.parseInt(muestraIteracion.getText())+1));
+					int casilla = Integer.parseInt(muestraIteracion.getText());	
+
+					if (casilla<21) {
+						if (casilla==1) {
+							ficha.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
+						}else {
+							ficha.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY()+38*(casilla-1));
+						}
+						in=false;
+					}else if (casilla<41) {
+						in=false;
+					}else if (casilla<61) {
+						in=false;
+					}else if (casilla<81) {
+						ficha.setLocation((int)referenciaCasillas61A80.getX()-29*(casilla-61), (int)referenciaCasillas61A80.getY());
+						in=false;
+					}				
+					if (casilla==81) {
+						muestraIteracion.setText("1");
+						casilla= Integer.parseInt(muestraIteracion.getText());
+					}
+					coordenadas.setText(referenciaCasillas61A80.toString());
+				}
+				
+				
+				
+				
+				
 			}
 		});
 		botonIterar.setBounds(986, 196, 105, 27);
 		contentPane.add(botonIterar);
 		
-		
+
 		
 		
 		
