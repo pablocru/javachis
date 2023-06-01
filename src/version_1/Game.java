@@ -52,7 +52,7 @@ public class Game {
 	
 	private void createBoxes() {
 		for (int i=1;i<=80; i++) {
-			if (i==1||i==21||i==41||i==61) {
+			if (i==RED_STARTING_BOX||i==YELLOW_STARTING_BOX||i==GREEN_STARTING_BOX||i==BLUE_STARTING_BOX) {
 				boxes[i]=new StartingBox(i);
 			}
 			else {
@@ -73,17 +73,13 @@ public class Game {
 		this.turnOwner = (this.turnOwner + 1) % 4;
 	}
 	
-	private void startPieceMove(Piece piece, int position) {
-		
-	}
-	
 	public void initiateTurn() {
 		int dice = rollDice();
 		
 		Player owner = this.players[this.turnOwner];
 		
 		if (dice == 5 && owner.isAnyoneHome()) {
-			startPieceMove(owner.getPieceFromHome(), owner.getStartingBox());
+			owner.getPieceFromHome().setPosition(owner.getStartingBox());
 		}
 	}
 }
