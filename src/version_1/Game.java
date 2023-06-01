@@ -13,6 +13,8 @@ public class Game {
 	private Player [] players;
 	private int turnOwner;
 	private Box [] boxes;
+	private boolean isFinish = false;
+	private Player winner;
 
 //	Constructors
 	public Game(int numberOfPlayers) {
@@ -36,14 +38,18 @@ public class Game {
 	public int getTurnOwner() {
 		return turnOwner;
 	}
-
+	
+	public Player getWinner() {return this.winner;}
+	
 //	Methods
 	private void createPlayers(int numberOfPlayers) {
 		this.players = new Player[numberOfPlayers];
 		
 		this.players[0] = new Player ("red", "Player 1", RED_STARTING_BOX);
 		
-		this.players[1] = new Player ("yellow", "Player 2", YELLOW_STARTING_BOX);
+		if (numberOfPlayers > 1) {
+			this.players[1] = new Player ("yellow", "Player 2", YELLOW_STARTING_BOX);
+		}
 
 		if (numberOfPlayers > 2) {
 			this.players[2] = new Player("green", "Player 3", GREEN_STARTING_BOX);
@@ -72,23 +78,51 @@ public class Game {
 	}
 	
 	private int rollDice() {
-		return new Random().nextInt(7);
+		return new Random().nextInt(1, 7);
 	}
 	
 	private void switchOwner() {
 		this.turnOwner = (this.turnOwner + 1) % players.length;
 	}
 	
+	public void movePiece(Player owner, int position) {
+		Piece piece = owner.getPieces()[0];
+		
+		
+		for (int i = 0; !this.isFinish && i < position; i++) {
+			int box = piece.getPosition();
+			
+			piece.setPosition(box == TOTAL_BOXES ? 1 : box + 1);
+			
+			if (piece.getPosition() == owner.getStartingBox()) {
+				this.isFinish = true;
+				this.winner = owner;
+			}
+		}
+	}
+	
 	public void initiateTurn() {
 		int dice = rollDice();
+		System.out.println("dice: " + dice);
 		
 		Player owner = this.players[this.turnOwner];
 		
-		if (dice == 5 && owner.isAnyoneHome()) owner.getPieceFromHome().setPosition(owner.getStartingBox());
-		else owner.getPieces()[0].setPosition(dice);
+		if (owner.isAnyoneHome()) {
+			if (dice == 5) {
+				owner.getPieceFromHome().setPosition(owner.getStartingBox());	
+				System.out.println(owner.getColor() + " is in " + owner.getPieces()[0].getPosition());
+			} 
+			else System.out.println("can't move");
+		}
+		else {
+			this.movePiece(owner, dice);
+			System.out.println(owner.getColor() + " is in " + owner.getPieces()[0].getPosition());			
+		}
 		
 		this.switchOwner();
 	}
+	
+	public boolean isFinish() {return this.isFinish;}
 
 	@Override
 	public String toString() {
