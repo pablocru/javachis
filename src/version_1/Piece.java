@@ -30,5 +30,9 @@ public class Piece {
 	public boolean isInFinalBox() {
 		return isInFinalBox;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Piece [id:" + id + ", position: " + position + ", isInFinalBox: " + isInFinalBox + "]";
+	}
 }

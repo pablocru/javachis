@@ -1,5 +1,7 @@
 package version_1;
 
+import java.util.Arrays;
+
 public class Player {
 //	Attributes
 	private String color;
@@ -59,5 +61,11 @@ public class Player {
 			if (pieces[i].getPosition() == 0) isInHome = true;
 		
 		return isInHome;		
+	}
+
+	@Override
+	public String toString() {
+		return "Player [color: " + color + ", name: " + name + ", pieces: " + Arrays.toString(pieces) + ", startingBox: "
+				+ startingBox + "]";
 	}
 }
