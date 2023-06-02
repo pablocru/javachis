@@ -5,10 +5,6 @@ import java.util.Random;
 
 public class Game {
 //	Attributes
-	private static final int RED_STARTING_BOX = 1;
-	private static final int YELLOW_STARTING_BOX = 21;
-	private static final int GREEN_STARTING_BOX = 41;
-	private static final int BLUE_STARTING_BOX = 61;
 	private static final int TOTAL_BOXES = 80;
 	private Player [] players;
 	private int turnOwner = 0;
@@ -17,15 +13,6 @@ public class Game {
 	private Player winner;
 
 //	Constructors
-//	public Game(int numberOfPlayers) {
-//		
-//		this.createPlayers(numberOfPlayers);
-//
-//		this.createBoxes();
-//		
-//		this.createTurn();
-//	}
-	
 	public Game(int numberOfPlayers) {
 		this.players = new Player[numberOfPlayers];
 		this.createBoxes();
@@ -34,10 +21,6 @@ public class Game {
 //	Getters
 	public Player[] getPlayers() {
 		return players;
-	}
-
-	public Box[] getBoxes() {
-		return boxes;
 	}
 	
 	public int getTurnOwner() {
@@ -49,35 +32,15 @@ public class Game {
 //	Methods
 	public void joinPlayer(int whoami) {
 		for (int i = 0; i < players.length; i++) {
-			if (i == whoami) {
-				
-			}
+			players[i] = new Player("Player", i == whoami);
 		}
 	}
-	
-//	private void createPlayers(int numberOfPlayers) {
-//		this.players = new Player[numberOfPlayers];
-//		
-//		this.players[0] = new Player ("red", "Player 1", RED_STARTING_BOX);
-//		
-//		if (numberOfPlayers > 1) {
-//			this.players[1] = new Player ("yellow", "Player 2", YELLOW_STARTING_BOX);
-//		}
-//
-//		if (numberOfPlayers > 2) {
-//			this.players[2] = new Player("green", "Player 3", GREEN_STARTING_BOX);
-//		}
-//		
-//		if (numberOfPlayers > 3) {
-//			this.players[3] = new Player("blue", "Player 4", BLUE_STARTING_BOX);
-//		}
-//	}
 	
 	private void createBoxes() {
 		this.boxes = new Box[TOTAL_BOXES];
 		
 		for (int i=0;i<TOTAL_BOXES; i++) {
-			if (i==RED_STARTING_BOX||i==YELLOW_STARTING_BOX||i==GREEN_STARTING_BOX||i==BLUE_STARTING_BOX) {
+			if (i==Player.RED_STARTING_BOX||i==Player.YELLOW_STARTING_BOX||i==Player.GREEN_STARTING_BOX||i==Player.BLUE_STARTING_BOX) {
 				boxes[i]=new StartingBox(i);
 			}
 			else {

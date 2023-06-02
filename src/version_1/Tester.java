@@ -17,6 +17,11 @@ public class Tester {
 		System.out.println("Turn owner: " + game.getPlayers()[game.getTurnOwner()].getColor());
 	}
 	
+	public static void displayPlayers() {
+		for (Player player : game.getPlayers())
+			System.out.println(player);
+	}
+	
 	private static void setClient() throws UnknownHostException, IOException {
 		socket = new Socket(IP, PORT);
 		System.out.println("Connecting to server" + socket.getInetAddress());
@@ -49,13 +54,11 @@ public class Tester {
 		game = new Game(2);
 		
 		switch(startMenu()) {
-		case 1: 
-//			System.out.println("Create play as Player 1"); 
+		case 1:
 			game.joinPlayer(0);
 			setServer();
 			break;
-		case 2: 
-//			System.out.println("Join play as Player 2");
+		case 2:
 			game.joinPlayer(1);
 			setClient();
 			break;
@@ -64,7 +67,7 @@ public class Tester {
 			break;
 		};
 		
-		
+		displayPlayers();
 		
 //		while(!game.isFinish()) {
 //			displayTurnOwner();

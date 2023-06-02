@@ -4,24 +4,42 @@ import java.util.Arrays;
 
 public class Player {
 //	Attributes
-	private static int playerCount = 0;
-	private static final int RED_STARTING_BOX = 1;
-	private static final int YELLOW_STARTING_BOX = 21;
-	private static final int GREEN_STARTING_BOX = 41;
-	private static final int BLUE_STARTING_BOX = 61;
+	private static int playerCount = 1;
+	protected static final int RED_STARTING_BOX = 1;
+	protected static final int YELLOW_STARTING_BOX = 21;
+	protected static final int GREEN_STARTING_BOX = 41;
+	protected static final int BLUE_STARTING_BOX = 61;
 	private String color;
 	private String name;
 	private Piece [] pieces = new Piece[1];
 	private int startingBox;
-	private int me;
+	private boolean isLocalPlayer;
 	
 //	Constructors
-	public Player(String color, String name, int startingBox, int me) {
-		this.color = color;
+	public Player(String name, boolean isLocalPlayer) {
 		this.name = name;
-		this.startingBox = startingBox;
 		this.setPieces();
-		this.me = me;
+		this.isLocalPlayer = isLocalPlayer;
+		
+		switch(playerCount++) {
+		case 1:
+			this.color = "red";
+			this.startingBox = RED_STARTING_BOX;
+			break;
+		case 2: 
+			this.color = "yellow";
+			this.startingBox = YELLOW_STARTING_BOX;
+			break;
+		case 3:
+			this.color = "green";
+			this.startingBox = GREEN_STARTING_BOX;
+			break;
+		case 4:
+			this.color = "blue";
+			this.startingBox = BLUE_STARTING_BOX;
+			break;
+		}
+		
 	}
 
 //	Setters
@@ -73,6 +91,6 @@ public class Player {
 	@Override
 	public String toString() {
 		return "Player [color: " + color + ", name: " + name + ", pieces: " + Arrays.toString(pieces) + ", startingBox: "
-				+ startingBox + "]";
+				+ startingBox + ", isLocalPlayer: " + isLocalPlayer + "]";
 	}
 }
