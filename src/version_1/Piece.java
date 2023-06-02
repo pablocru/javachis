@@ -4,11 +4,10 @@ public class Piece {
 //	Attributes
 	private int id;
 	private int position;
-	private boolean isInFinalBox=false;
 	
 //	Constructors
 	public Piece(int id, int position) {
-		this.id=id;
+		this.id = id;
 		this.position = position;
 	}
 
@@ -27,12 +26,8 @@ public class Piece {
 	}
 
 //	Methods
-	public boolean isInFinalBox() {
-		return isInFinalBox;
-	}
-
 	@Override
 	public String toString() {
-		return "Piece [id:" + id + ", position: " + position + ", isInFinalBox: " + isInFinalBox + "]";
+		return "id: " + id + ", position: " + position;
 	}
 }

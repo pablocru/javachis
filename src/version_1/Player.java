@@ -48,21 +48,15 @@ public class Player {
 	}
 	
 //	Getters
-	public String getColor() {
-		return color;
-	}
+	public String getColor() {return color;}
 
-	public String getName() {
-		return name;
-	}
+	public String getName() {return name;}
 	
-	public int getStartingBox() {
-		return this.startingBox;
-	}
+	public int getStartingBox() {return this.startingBox;}
 
-	public Piece [] getPieces() {
-		return pieces;
-	}
+	public Piece [] getPieces() {return pieces;}
+	
+	public boolean getIsLocalPlayer() {return this.isLocalPlayer;}
 	
 	public Piece getPieceFromHome() {
 		boolean lock = true;
@@ -90,7 +84,7 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player [color: " + color + ", name: " + name + ", pieces: " + Arrays.toString(pieces) + ", startingBox: "
-				+ startingBox + ", isLocalPlayer: " + isLocalPlayer + "]";
+		return "color: " + color + ", name: " + name + ", pieces: " + Arrays.toString(pieces) + ", startingBox: "
+				+ startingBox + ", isLocalPlayer: " + isLocalPlayer;
 	}
 }

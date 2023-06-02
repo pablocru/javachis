@@ -22,6 +22,6 @@ public class Box {
 //	Methods
 	@Override
 	public String toString() {
-		return "Box [boxNumber: " + boxNumber + ", firstPiece: " + firstPiece + "]";
+		return "boxNumber: " + boxNumber + ", firstPiece: " + firstPiece;
 	}
 }

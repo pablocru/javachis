@@ -9,6 +9,7 @@ public class Game {
 	private Player [] players;
 	private int turnOwner = 0;
 	private Box [] boxes;
+	private int dice;
 	private boolean isFinish = false;
 	private Player winner;
 
@@ -19,15 +20,13 @@ public class Game {
 	}
 
 //	Getters
-	public Player[] getPlayers() {
-		return players;
-	}
+	public Player[] getPlayers() {return players;}
 	
-	public int getTurnOwner() {
-		return turnOwner;
-	}
+	public Player getTurnOwner() {return players[turnOwner];}
 	
 	public Player getWinner() {return this.winner;}
+	
+	public int getDice() {return this.dice;}
 	
 //	Methods
 	public void joinPlayer(int whoami) {
@@ -39,22 +38,20 @@ public class Game {
 	private void createBoxes() {
 		this.boxes = new Box[TOTAL_BOXES];
 		
-		for (int i=0;i<TOTAL_BOXES; i++) {
-			if (i==Player.RED_STARTING_BOX||i==Player.YELLOW_STARTING_BOX||i==Player.GREEN_STARTING_BOX||i==Player.BLUE_STARTING_BOX) {
-				boxes[i]=new StartingBox(i);
-			}
-			else {
-				boxes[i]=new Box(i);
-			}
-		}
+		for (int i=0;i<TOTAL_BOXES; i++)
+			boxes[i]=new Box(i);
 	}
 	
-	private int rollDice() {
-		return new Random().nextInt(1, 7);
+	public void rollDice() {
+		this.dice = new Random().nextInt(1, 7);
 	}
 	
-	private void switchOwner() {
+	public void switchOwner() {
 		this.turnOwner = (this.turnOwner + 1) % players.length;
+	}
+	
+	public void startPiece(Player owner) {
+		owner.getPieceFromHome().setPosition(owner.getStartingBox());
 	}
 	
 	public void movePiece(Player owner, int position) {
@@ -73,32 +70,11 @@ public class Game {
 		}
 	}
 	
-	public void initiateTurn() {
-		int dice = rollDice();
-		System.out.println("dice: " + dice);
-		
-		Player owner = this.players[this.turnOwner];
-		
-		if (owner.isAnyoneHome()) {
-			if (dice == 5) {
-				owner.getPieceFromHome().setPosition(owner.getStartingBox());	
-				System.out.println(owner.getColor() + " is in " + owner.getPieces()[0].getPosition());
-			} 
-			else System.out.println("can't move");
-		}
-		else {
-			this.movePiece(owner, dice);
-			System.out.println(owner.getColor() + " is in " + owner.getPieces()[0].getPosition());			
-		}
-		
-		this.switchOwner();
-	}
-	
 	public boolean isFinish() {return this.isFinish;}
 
 	@Override
 	public String toString() {
-		return "Game [players: " + Arrays.toString(players) + ", turnOwner: " + turnOwner + ", boxes: "
-				+ Arrays.toString(boxes) + "]";
+		return "players: " + Arrays.toString(players) + ", turnOwner: " + turnOwner + ", boxes: "
+				+ Arrays.toString(boxes);
 	}
 }
