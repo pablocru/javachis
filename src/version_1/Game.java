@@ -1,9 +1,10 @@
 package version_1;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Game {
+public class Game implements Serializable {
 //	Attributes
 	private static final int TOTAL_BOXES = 80;
 	private Player [] players;

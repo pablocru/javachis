@@ -1,6 +1,8 @@
 package version_1;
 
-public class Box {
+import java.io.Serializable;
+
+public class Box implements Serializable {
 //	Attributes
 	private int boxNumber;
 	private Piece firstPiece = null;

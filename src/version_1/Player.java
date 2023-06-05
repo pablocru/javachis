@@ -1,8 +1,9 @@
 package version_1;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Player {
+public class Player implements Serializable {
 //	Attributes
 	private static int playerCount = 1;
 	protected static final int RED_STARTING_BOX = 1;

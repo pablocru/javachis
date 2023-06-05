@@ -1,6 +1,8 @@
 package version_1;
 
-public class Piece {
+import java.io.Serializable;
+
+public class Piece implements Serializable {
 //	Attributes
 	private int id;
 	private int position;
