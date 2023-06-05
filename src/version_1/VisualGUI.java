@@ -2,6 +2,7 @@ package version_1;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Point;
 
 import javax.swing.JFrame;
@@ -9,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Color;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Random;
@@ -23,6 +26,9 @@ public class VisualGUI extends JFrame {
 	Point referenciaCasillas41A60;
 	Point referenciaCasillas61A80;
 	JPanel fichaRoja = new JPanel();
+	int casillaRojo;
+	int casillaVerde;
+	int mueveFichas;
 
 
 
@@ -58,9 +64,9 @@ public class VisualGUI extends JFrame {
 		panel.setBounds(15, 15, 900, 900);
 		contentPane.add(panel);
 		panel.setLayout(null);
+		
+		
 		fichaRoja.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-
-
 		fichaRoja.setBackground(Color.RED);
 		fichaRoja.setBounds(100,300, 28, 28);
 		panel.add(fichaRoja);
@@ -110,56 +116,61 @@ public class VisualGUI extends JFrame {
 				boolean in=true;
 				while (in) {
 
-					muestraIteracionRojo.setText(String.valueOf(Integer.parseInt(muestraIteracionRojo.getText())+1));
+					/*
+					 * Se ejecuta un bucle porque es necesario que haga un check del numero de casilla que tiene
+					 */
+					
+					muestraIteracionRojo.setText(String.valueOf(Integer.parseInt(muestraIteracionRojo.getText())+mueveFichas)); //el label que muestra la iteracion
 
-					int casilla = Integer.parseInt(muestraIteracionRojo.getText()); //variable que se necesita para no hacer un gettext de muestraIteracion	
+					casillaRojo = Integer.parseInt(muestraIteracionRojo.getText()); //variable auxiliar que se necesita para no hacer un gettext de muestraIteracion	
 
-					Point casilla2= new Point(100,302);
+					Point casilla2= new Point(100,302); //estos puntos no se para que están muy bien, pero los dejo ahi por si acaso 
 					Point casilla22=new Point(300, 750);
 					Point casilla42=new Point(700,567);
 
-					if (casilla<21) {
-						if (casilla==1) {
+					if (casillaRojo<21) {
+						if (casillaRojo==1) {//esta es la primera casilla del bloque, que es diferente a las demás 
 							fichaRoja.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-
+							//cuando es 1, se hace un set de las referencias vacias
 						}
 						else {
-							fichaRoja.setLocation((int)casilla2.getX(), (int)casilla2.getY()+30*(casilla-1));
+							fichaRoja.setLocation((int)casilla2.getX(), (int)casilla2.getY()+30*(casillaRojo-1));
+							//si no es la 1, se hace un setter de las referencias mas una suma del numero de casillas de diferencia que tiene con la primera del bloque (que es la 1)
 						}
-						in=false;
-					}else if (casilla<41) {
-						if (casilla==21) {
+						in=false;//cuando esto se da, el bucle pasa a false
+					}else if (casillaRojo<41) {
+						if (casillaRojo==21) {
 							fichaRoja.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
 
 						}
 						else {
-							fichaRoja.setLocation((int)casilla22.getX()+29*(casilla-21), (int)casilla22.getY());
+							fichaRoja.setLocation((int)casilla22.getX()+29*(casillaRojo-21), (int)casilla22.getY());
 						}
 						in=false;
-					}else if (casilla<61) {
-						if (casilla==41) {
+					}else if (casillaRojo<61) {
+						if (casillaRojo==41) {
 							fichaRoja.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
 						}
 						else {
-							fichaRoja.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(casilla-41));
+							fichaRoja.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(casillaRojo-41));
 						}
 						in=false;
-					}else if (casilla<81) {
-						fichaRoja.setLocation((int)referenciaCasillas61A80.getX()-29*(casilla-61), (int)referenciaCasillas61A80.getY());
+					}else if (casillaRojo<81) {
+						fichaRoja.setLocation((int)referenciaCasillas61A80.getX()-29*(casillaRojo-61), (int)referenciaCasillas61A80.getY());
 						in=false;
 					}				
-					if (casilla==81) {
+					if (casillaRojo==81) {
 						muestraIteracionRojo.setText("1");
-						casilla= Integer.parseInt(muestraIteracionRojo.getText());
+						casillaRojo= Integer.parseInt(muestraIteracionRojo.getText());
 					}
-					if (casilla==1) {
+					if (casillaRojo==1) {
 						fichaRoja.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
 
 					}
 					in=false;
 				}
 				coordenadasRoja.setText(fichaRoja.getLocation()+"."); //EL PUNTO NO LO TOQUES, QUE SI NO, NO VA
-
+				//Se hace un setText de las coordenadas de la ficha, para ayudarnos con los puntos
 			}
 		});
 		botonOriginal.setBounds(986, 315, 105, 27);
@@ -168,56 +179,57 @@ public class VisualGUI extends JFrame {
 		JButton btnMoverVerde = new JButton("Mover Verde");
 		btnMoverVerde.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				boolean in=true;
 				while (in) {
-					muestraIteracionVerde.setText(String.valueOf(Integer.parseInt(muestraIteracionVerde.getText())+1));
-					int casilla = Integer.parseInt(muestraIteracionVerde.getText()); //variable que se necesita para no hacer un gettext de muestraIteracion	
+					muestraIteracionVerde.setText(String.valueOf(Integer.parseInt(muestraIteracionVerde.getText())+mueveFichas));
+					casillaVerde = Integer.parseInt(muestraIteracionVerde.getText()); //variable que se necesita para no hacer un gettext de muestraIteracion	
 
 					Point casilla2= new Point(100,302);
 					Point casilla22=new Point(300, 750);
 					Point casilla42=new Point(700,567);
-					
-					if (casilla<21) {
-						if (casilla==1) {
+
+					if (casillaVerde<21) {
+						if (casillaVerde==1) {
 							fichaVerde.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
 						}
 						else {
-							fichaVerde.setLocation((int)casilla2.getX(), (int)casilla2.getY()+30*(casilla-1));
+							fichaVerde.setLocation((int)casilla2.getX(), (int)casilla2.getY()+30*(casillaVerde-1));
 						}
 						in=false;
-					}else if (casilla<41) {
-						if (casilla==21) {
+					}else if (casillaVerde<41) {
+						if (casillaVerde==21) {
 							fichaVerde.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
 
 						}
 						else {
-							fichaVerde.setLocation((int)casilla22.getX()+29*(casilla-21), (int)casilla22.getY());
+							fichaVerde.setLocation((int)casilla22.getX()+29*(casillaVerde-21), (int)casilla22.getY());
 						}
 						in=false;
-					}else if (casilla<61) {
-						if (casilla==41) {
+					}else if (casillaVerde<61) {
+						if (casillaVerde==41) {
 							fichaVerde.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
 						}
 						else {
-							fichaVerde.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(casilla-41));
+							fichaVerde.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(casillaVerde-41));
 						}
 						in=false;
-					}else if (casilla<81) {
-						fichaVerde.setLocation((int)referenciaCasillas61A80.getX()-29*(casilla-61), (int)referenciaCasillas61A80.getY());
+					}else if (casillaVerde<81) {
+						fichaVerde.setLocation((int)referenciaCasillas61A80.getX()-29*(casillaVerde-61), (int)referenciaCasillas61A80.getY());
 						in=false;
 					}				
-					if (casilla==81) {
+					if (casillaVerde==81) {
 						muestraIteracionVerde.setText("1");
-						casilla= Integer.parseInt(muestraIteracionVerde.getText());
+						casillaVerde= Integer.parseInt(muestraIteracionVerde.getText());
 					}
-					if (casilla==1) {
+					if (casillaVerde==1) {
 						fichaVerde.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
 
 					}
 					in=false;
 				}
 				coordenadasVerde.setText(fichaVerde.getLocation()+"."); //EL PUNTO NO LO TOQUES, QUE SI NO, NO VA
+
 			}
 		});
 		btnMoverVerde.setBounds(986, 393, 105, 27);
@@ -234,17 +246,29 @@ public class VisualGUI extends JFrame {
 		JLabel resultDice = new JLabel("Result: ");
 		resultDice.setBounds(1214, 467, 60, 17);
 		contentPane.add(resultDice);
+		
+		JLabel imageDice = new JLabel("Aqui la imagen del dado");
+		imageDice.setBounds(986, 525, 162, 98);
+		contentPane.add(imageDice);
 
 		JButton tirarDado = new JButton("Tirar Dado");
 		tirarDado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				Random r = new Random();
-				int numDice = r.nextInt(6)+1;
-				resultDice.setText("Result: "+numDice);
+				mueveFichas = r.nextInt(6)+1;
+				resultDice.setText("Result: "+mueveFichas);				
+//				ImageIcon imagen = new ImageIcon("/../version_1.imagenes/dado-"+ mueveFichas+".svg");
+				ImageIcon imagen = new ImageIcon("dado-2.png");
+				imageDice.setIcon(imagen);
+				imageDice.setText(null);
 			}
 		});
 		tirarDado.setBounds(986, 462, 105, 27);
 		contentPane.add(tirarDado);
+		
+		
+		
+		
 
 
 
