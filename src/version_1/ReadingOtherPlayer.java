@@ -5,6 +5,11 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * This class extends Thread, and it has 3 attributes: an input, a socket and a server
+ * @author migguavil
+ *
+ */
 public class ReadingOtherPlayer extends Thread {
 	//	Attributes
 	private ObjectInputStream input;
