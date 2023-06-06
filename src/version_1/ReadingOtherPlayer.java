@@ -29,10 +29,13 @@ public class ReadingOtherPlayer extends Thread {
 			boolean lock = true;
 
 			while(lock) {
-				Game game = (Game) input.readObject();
+				Object ob = input.readObject();
 				
-				if (game == null) lock = false;
-				else parchis.setGame(game);			
+				if (ob instanceof Game) {
+					Game game = (Game) ob;
+					parchis.setGame(game);
+				}
+				else lock = false;	
 			}
 		} 
 		catch (IOException e) {
