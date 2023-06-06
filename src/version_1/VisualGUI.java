@@ -247,36 +247,27 @@ public class VisualGUI extends JFrame {
 		resultDice.setBounds(1214, 467, 60, 17);
 		contentPane.add(resultDice);
 		
-		JLabel imageDice = new JLabel("Aqui la imagen del dado");
-		imageDice.setBounds(986, 525, 162, 98);
+		JLabel imageDice = new JLabel("");
+		imageDice.setIcon(new ImageIcon(VisualGUI.class.getResource("/version_1/dice1.png")));
+		imageDice.setBounds(986, 525, 371, 371);
 		contentPane.add(imageDice);
 
 		JButton tirarDado = new JButton("Tirar Dado");
 		tirarDado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
+				//It creates random number r
 				Random r = new Random();
+				//It sets int mueveFichas with a number from 0 to 5, but it adds 1, so it's from 1 to 6
 				mueveFichas = r.nextInt(6)+1;
-				resultDice.setText("Result: "+mueveFichas);				
-//				ImageIcon imagen = new ImageIcon("/../version_1.imagenes/dado-"+ mueveFichas+".svg");
-				ImageIcon imagen = new ImageIcon("dado-2.png");
-				imageDice.setIcon(imagen);
-				imageDice.setText(null);
+				//It sets resultDice text
+				resultDice.setText("Result: "+mueveFichas);	
+				//it sets Icon 
+				imageDice.setIcon(new ImageIcon(VisualGUI.class.getResource("/version_1/dice"+mueveFichas+".png")));
 			}
 		});
 		tirarDado.setBounds(986, 462, 105, 27);
 		contentPane.add(tirarDado);
 		
-		
-		
-		
-
-
-
-
-
-
-
-
 
 
 	}
