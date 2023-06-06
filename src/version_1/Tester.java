@@ -16,7 +16,7 @@ public class Tester {
 	private static ReadingOtherPlayer reader;
 	private final static int PORT = 5005;
 	private final static String IP = "127.0.0.1";
-	private static Game game;
+	private static Game game = null;
 
 	public static void displayPlayers() {
 		for (Player player : game.getPlayers())
@@ -47,8 +47,8 @@ public class Tester {
 	private static void ObjectInputStream() throws IOException {
 		input = new ObjectInputStream(socket.getInputStream());
 
-		reader = new ReadingOtherPlayer(input, socket, server);
-		reader.start();
+//		reader = new ReadingOtherPlayer(input, game);
+//		reader.start();
 	}
 	private static void ObjectOutputStream() throws IOException {
 		output = new ObjectOutputStream(socket.getOutputStream());
@@ -78,13 +78,17 @@ public class Tester {
 				output.writeObject(game);
 				break;
 			case 2:
-//				game.joinPlayer(1);
 				setClient();
+				Thread.sleep(500);
+				System.out.println("main: " + game);
+				game.joinPlayer(1);
 				break;
 			case 0: 
 				System.out.println("Exit"); 
 				break;
 			};
+			
+			displayPlayers();
 			
 //			output.println(game);
 //
@@ -118,6 +122,7 @@ public class Tester {
 //
 //			System.out.println("Winner: " + game.getWinner().getColor());
 		}
-		catch (IOException e) {e.printStackTrace();}
+		catch (IOException e) {e.printStackTrace();} 
+		catch (InterruptedException e) {e.printStackTrace();}
 	}
 }

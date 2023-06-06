@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 public class Player implements Serializable {
 //	Attributes
-	private static int playerCount = 1;
 	protected static final int RED_STARTING_BOX = 1;
 	protected static final int YELLOW_STARTING_BOX = 21;
 	protected static final int GREEN_STARTING_BOX = 41;
@@ -14,28 +13,26 @@ public class Player implements Serializable {
 	private String name;
 	private Piece [] pieces = new Piece[1];
 	private int startingBox;
-	private boolean isLocalPlayer;
 	
 //	Constructors
-	public Player(String name, boolean isLocalPlayer) {
+	public Player(String name, int whoAmI) {
 		this.name = name;
 		this.setPieces();
-		this.isLocalPlayer = isLocalPlayer;
 		
-		switch(playerCount++) {
-		case 1:
+		switch(whoAmI) {
+		case 0:
 			this.color = "red";
 			this.startingBox = RED_STARTING_BOX;
 			break;
-		case 2: 
+		case 1: 
 			this.color = "yellow";
 			this.startingBox = YELLOW_STARTING_BOX;
 			break;
-		case 3:
+		case 2:
 			this.color = "green";
 			this.startingBox = GREEN_STARTING_BOX;
 			break;
-		case 4:
+		case 3:
 			this.color = "blue";
 			this.startingBox = BLUE_STARTING_BOX;
 			break;
@@ -56,8 +53,6 @@ public class Player implements Serializable {
 	public int getStartingBox() {return this.startingBox;}
 
 	public Piece [] getPieces() {return pieces;}
-	
-	public boolean getIsLocalPlayer() {return this.isLocalPlayer;}
 	
 	public Piece getPieceFromHome() {
 		boolean lock = true;
@@ -86,6 +81,6 @@ public class Player implements Serializable {
 	@Override
 	public String toString() {
 		return "color: " + color + ", name: " + name + ", pieces: " + Arrays.toString(pieces) + ", startingBox: "
-				+ startingBox + ", isLocalPlayer: " + isLocalPlayer;
+				+ startingBox;
 	}
 }

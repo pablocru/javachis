@@ -23,6 +23,8 @@ public class Game implements Serializable {
 //	Getters
 	public Player[] getPlayers() {return players;}
 	
+	public Player getPlayerByIndex(int index) {return this.players[index];}
+	
 	public Player getTurnOwner() {return players[turnOwner];}
 	
 	public Player getWinner() {return this.winner;}
@@ -30,10 +32,8 @@ public class Game implements Serializable {
 	public int getDice() {return this.dice;}
 	
 //	Methods
-	public void joinPlayer(int whoami) {
-		for (int i = 0; i < players.length; i++) {
-			players[i] = new Player("Player", i == whoami);
-		}
+	public void joinPlayer(int whoAmI) {
+		players[whoAmI] = new Player("Player", whoAmI);
 	}
 	
 	private void createBoxes() {

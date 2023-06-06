@@ -4,18 +4,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ReadingOtherPlayer extends Thread {
 	//	Attributes
 	private ObjectInputStream input;
-	private Socket socket;
-	private ServerSocket server;
+	private Controller parchis;
 
 	//	Constructor
-	public ReadingOtherPlayer(ObjectInputStream input, Socket socket, ServerSocket server) {
+	public ReadingOtherPlayer(ObjectInputStream input, Controller parchis) {
 		this.input = input;
-		this.socket = socket;
-		this.server = server;
+		this.parchis = parchis;
 	}
 
 	//	Methods
@@ -25,16 +24,10 @@ public class ReadingOtherPlayer extends Thread {
 			boolean lock = true;
 
 			while(lock) {
-				System.out.println("voy a leer el obj");
 				Game game = (Game) input.readObject();
 				
-				if (game == null) {
-					socket.close();
-					if (server != null) server.close();
-				}
-				else {
-					this.displayPlayers(game);
-				}				
+				if (game == null) lock = false;
+				else parchis.setGame(game);			
 			}
 		} 
 		catch (IOException e) {
@@ -44,10 +37,4 @@ public class ReadingOtherPlayer extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	public void displayPlayers(Game game) {
-		for (Player player : game.getPlayers())
-			System.out.println(player);
-	}
-
 }
