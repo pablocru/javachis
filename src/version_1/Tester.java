@@ -18,11 +18,22 @@ public class Tester {
 	private final static String IP = "127.0.0.1";
 	private static Game game = null;
 
+	
+	/**
+	 * This method displays all the players the game has, with a for:each structure
+	 */
 	public static void displayPlayers() {
 		for (Player player : game.getPlayers())
 			System.out.println(player);
 	}
 
+	
+	/**
+	 * setClient creates a socket, prints Connecting to Server and returns the adress to which the socket is connected.
+	 * First, it connects the Clients' Output with the Server's Input, and then the reverse.
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 */
 	private static void setClient() throws UnknownHostException, IOException {
 		socket = new Socket(IP, PORT);
 		System.out.println("Connecting to server" + socket.getInetAddress());
@@ -31,6 +42,13 @@ public class Tester {
 		ObjectInputStream();
 	}
 
+	
+	/**
+	 * setServer creates a server, it prints it's waiting for a client, until the server accepts a cliente, and then, it prints
+	 * that it is connected, and it returns the socket adress. Then, a waiting time is of 10 seconds before the thread closes.
+	 * 
+	 * @throws IOException
+	 */
 	private static void setServer() throws IOException {
 		server = new ServerSocket(PORT);
 
@@ -44,6 +62,11 @@ public class Tester {
 		ObjectOutputStream();
 	}
 	
+	/**
+	 * ObjectInputStream reads data from the stream and wirtes it in input object . Then it creates a reader, and starts the thread
+	 * in background
+	 * @throws IOException
+	 */
 	private static void ObjectInputStream() throws IOException {
 		input = new ObjectInputStream(socket.getInputStream());
 
@@ -54,6 +77,11 @@ public class Tester {
 		output = new ObjectOutputStream(socket.getOutputStream());
 	}
 
+	
+	/**
+	 * startMenu asks user if he wants to start a game, or join other
+	 * @return
+	 */
 	public static int startMenu() {
 		Scanner k = new Scanner(System.in);
 
