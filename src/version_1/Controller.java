@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Controller {
-	//	Attributes
+//	Attributes
 	private Socket socket;
 	private ServerSocket server;
 	private ObjectOutputStream output;
@@ -18,17 +18,20 @@ public class Controller {
 	private final int PORT = 5005;
 	private final String IP = "127.0.0.1";
 	private Game game;
+	private static final int TIME_SLEEPING = 200;
+	private int whoAmI;
 
 //	Setters
 	protected void setGame(Game game) {this.game = game;}
+	
+//	Getters
+	protected ObjectInputStream getInput() {return this.input;}
 
-	//	Getters
-	private Game getGame() {return this.game;}
-
-	//	Methods
+//	Methods
 	private void displayPlayers() {
 		for (Player player : this.game.getPlayers())
 			System.out.println(player);
+		System.out.println();
 	}
 
 	private void setClient() throws UnknownHostException, IOException {
@@ -55,7 +58,7 @@ public class Controller {
 	private void ObjectInputStream() throws IOException {
 		input = new ObjectInputStream(socket.getInputStream());
 
-		reader = new ReadingOtherPlayer(input, this);
+		reader = new ReadingOtherPlayer(this);
 		reader.start();
 	}
 	private void ObjectOutputStream() throws IOException {
@@ -75,24 +78,25 @@ public class Controller {
 		return (res == 1 || res == 2) ? res : 0;
 	}
 
-	//	Main
+//	Main
 	public static void main(String[] args) {
 		Controller parchis = new Controller();
-		int timeSleeping = 100;
 
 		try {
 			switch(startMenu()) {
 			case 1:
+				parchis.whoAmI = 0;
 				parchis.game = new Game(2);
-				parchis.game.joinPlayer(0);
+				parchis.game.joinPlayer(parchis.whoAmI);
 				parchis.setServer();
 				parchis.output.writeObject(parchis.game);
-				Thread.sleep(timeSleeping*2);
+				Thread.sleep(TIME_SLEEPING);
 				break;
 			case 2:
+				parchis.whoAmI = 1;
 				parchis.setClient();
-				Thread.sleep(timeSleeping);
-				parchis.game.joinPlayer(1);
+				Thread.sleep(TIME_SLEEPING/2);
+				parchis.game.joinPlayer(parchis.whoAmI);
 				parchis.output.writeObject(parchis.game);
 				break;
 			case 0: 
@@ -101,6 +105,35 @@ public class Controller {
 			};
 
 			parchis.displayPlayers();
+			
+			while(!parchis.game.isFinish()) {
+				Player owner = parchis.game.getTurnOwnerPlayer();
+				String color = owner.getColor();
+				
+				System.out.println("Turn owner: " + color);
+				if (parchis.game.getTurnOwnerInt() == parchis.whoAmI) {
+					
+					parchis.game.rollDice();
+					System.out.println(parchis.game.getDice());
+					if (parchis.game.getTurnOwnerPlayer().isAnyoneHome()) {
+						if (parchis.game.getDice() == 5) {
+							System.out.println(color + " take piece from home");
+							parchis.game.startPiece();	
+							System.out.println(color + " is in " + owner.getPieces()[0].getPosition());
+						}
+						else System.out.println(color + " can't move");
+					}
+					else {
+						parchis.game.movePiece();
+						System.out.println(color + " moves to " + owner.getPieces()[0].getPosition());
+					}
+					
+					parchis.game.switchOwner();
+					parchis.output.writeObject(parchis.game);
+				}
+				else Thread.sleep(TIME_SLEEPING);		
+			}
+			System.out.println("Winner: " + parchis.game.getWinner().getColor());
 		}
 		catch (IOException e) {e.printStackTrace();} 
 		catch (InterruptedException e) {e.printStackTrace();}

@@ -13,11 +13,13 @@ public class Game implements Serializable {
 	private int dice;
 	private boolean isFinish = false;
 	private Player winner;
+	private Random r = new Random();
 
 //	Constructors
 	public Game(int numberOfPlayers) {
 		this.players = new Player[numberOfPlayers];
 		this.createBoxes();
+		r.setSeed(System.currentTimeMillis());
 	}
 
 //	Getters
@@ -25,7 +27,9 @@ public class Game implements Serializable {
 	
 	public Player getPlayerByIndex(int index) {return this.players[index];}
 	
-	public Player getTurnOwner() {return players[turnOwner];}
+	public Player getTurnOwnerPlayer() {return players[turnOwner];}
+	
+	public int getTurnOwnerInt() {return turnOwner;}
 	
 	public Player getWinner() {return this.winner;}
 	
@@ -44,22 +48,26 @@ public class Game implements Serializable {
 	}
 	
 	public void rollDice() {
-		this.dice = new Random().nextInt(1, 7);
+		this.dice = r.nextInt(1, 7);
 	}
 	
 	public void switchOwner() {
 		this.turnOwner = (this.turnOwner + 1) % players.length;
 	}
 	
-	public void startPiece(Player owner) {
+	public void startPiece() {
+		Player owner = this.getTurnOwnerPlayer();
+		
 		owner.getPieceFromHome().setPosition(owner.getStartingBox());
 	}
 	
-	public void movePiece(Player owner, int position) {
+	public void movePiece() {
+		Player owner = this.getTurnOwnerPlayer();
+		
 		Piece piece = owner.getPieces()[0];
 		
 		
-		for (int i = 0; !this.isFinish && i < position; i++) {
+		for (int i = 0; !this.isFinish && i < this.dice; i++) {
 			int box = piece.getPosition();
 			
 			piece.setPosition(box == TOTAL_BOXES ? 1 : box + 1);
