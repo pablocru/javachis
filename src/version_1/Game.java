@@ -70,28 +70,35 @@ public class Game implements Serializable {
 		this.turnOwner = (this.turnOwner + 1) % players.length;
 	}
 	
-	public void startPiece() {
+	public int startPiece() {
 		Player owner = this.getTurnOwnerPlayer();
 		
 		owner.getPieceFromHome().setPosition(owner.getStartingBox());
+		
+		return owner.getStartingBox();
 	}
 	
-	public void movePiece() {
+	public int movePiece() {
 		Player owner = this.getTurnOwnerPlayer();
 		
 		Piece piece = owner.getPieces()[0];
 		
+		int newPosition = 0;
 		
 		for (int i = 0; !this.isFinish && i < this.dice; i++) {
 			int box = piece.getPosition();
 			
-			piece.setPosition(box == TOTAL_BOXES ? 1 : box + 1);
+			newPosition = box == TOTAL_BOXES ? 1 : box + 1;
+			
+			piece.setPosition(newPosition);
 			
 			if (piece.getPosition() == owner.getStartingBox()) {
 				this.isFinish = true;
 				this.winner = owner;
 			}
 		}
+		
+		return newPosition;
 	}
 	
 	public boolean isFinish() {return this.isFinish;}
