@@ -128,10 +128,12 @@ public class Controller {
 						System.out.println(color + " moves to " + owner.getPieces()[0].getPosition());
 					}
 					
-					parchis.game.switchOwner();
 					parchis.output.writeObject(parchis.game);
 				}
-				else Thread.sleep(TIME_SLEEPING);		
+				else Thread.sleep(TIME_SLEEPING);
+				
+				parchis.game.switchOwner();
+				parchis.displayPlayers();
 			}
 			System.out.println("Winner: " + parchis.game.getWinner().getColor());
 		}
