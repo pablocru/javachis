@@ -13,11 +13,13 @@ public class Player implements Serializable {
 	private String name;
 	private Piece [] pieces = new Piece[1];
 	private int startingBox;
+	private int whoAmI;
 	
 //	Constructors
 	public Player(String name, int whoAmI) {
 		this.name = name;
 		this.setPieces();
+		this.whoAmI = whoAmI;
 		
 		switch(whoAmI) {
 		case 0:
@@ -53,6 +55,8 @@ public class Player implements Serializable {
 	public int getStartingBox() {return this.startingBox;}
 
 	public Piece [] getPieces() {return pieces;}
+	
+	public int getWhoAmI() {return this.whoAmI;}
 	
 	public Piece getPieceFromHome() {
 		boolean lock = true;
