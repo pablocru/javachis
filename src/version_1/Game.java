@@ -27,6 +27,21 @@ public class Game implements Serializable {
 	
 	public Player getPlayerByIndex(int index) {return this.players[index];}
 	
+	public Player getPlayerByColor(String color) {
+		boolean lock = true;
+		Player player = null;
+		
+		for (int i = 0; lock && i < this.players.length; i++) {
+			Player focusedPlayer = this.players[i];
+			if (focusedPlayer.getColor().equals(color)) {
+				player = focusedPlayer;
+				lock = false;
+			}
+		}
+		
+		return player;
+	}
+	
 	public Player getTurnOwnerPlayer() {return players[turnOwner];}
 	
 	public int getTurnOwnerInt() {return turnOwner;}
