@@ -19,34 +19,40 @@ import java.net.Socket;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
+import javax.swing.SwingConstants;
 
 public class ViewGUI extends JFrame {
 	//	Attributes
 	//	Frame
-	private JPanel contentPane;
-	Point referenciaCasillas1A20;
-	Point referenciaCasillas21A40;
-	Point referenciaCasillas41A60;
-	Point referenciaCasillas61A80;
-	JPanel fichaRoja = new JPanel();
-	JPanel fichaVerde = new JPanel();
-	JPanel initial_pane = new JPanel();
-	JPanel parchis_pane = new JPanelConFondoParchis("../img/Parchis_version_2.png");
-	JPanel player_pane = new JPanel();
-	JButton botonOriginal = new JButton("Mover Rojo");
-	JButton btnMoverVerde = new JButton("Mover Verde");
-	JButton tirarDado = new JButton("Tirar Dado");
-	JLabel muestraIteracionRojo = new JLabel("1");
-	JLabel muestraIteracionVerde = new JLabel("41");
-	JLabel coordenadasRoja = new JLabel("Coordenadas roja");
-	JLabel coordenadasVerde = new JLabel("Coordenadas Verde");
-	JLabel lblCasillarojo = new JLabel("CasillaRojo");
-	JLabel lblCasillaVerde = new JLabel("Casilla Verde");
-	JLabel resultDice = new JLabel("Result: ");
-	JLabel imageDice = new JLabel("");
-	int casillaRojo;
-	int casillaVerde;
-	int mueveFichas;
+	private Point referenciaCasillas1A20;
+	private Point referenciaCasillas21A40;
+	private Point referenciaCasillas41A60;
+	private Point referenciaCasillas61A80;
+	private JPanel contentPane = new JPanel();
+	private JPanel redPiece = new JPanel();
+	private JPanel greenPiece = new JPanel();
+	private JPanel initial_pane = new JPanel();
+	private JPanel parchis_pane = new JPanelConFondoParchis("../img/Parchis_version_2.png");
+	private JPanel player_pane = new JPanel();
+	private JButton btn_createPlay = new JButton("Create play");
+	private JButton btn_joinPlay = new JButton("Join play");
+	private JButton btn_exit = new JButton("Exit");
+	private JButton btn_moveRed = new JButton("Mover Rojo");
+	private JButton btn_moveGreen = new JButton("Mover Verde");
+	private JButton btn_rollDice = new JButton("Tirar Dado");
+	private JLabel lbl_wellcome = new JLabel("Wellcome to Javachis");
+	private JLabel lbl_menu = new JLabel("What do you want to do?");
+	private JLabel muestraIteracionRojo = new JLabel("1");
+	private JLabel muestraIteracionVerde = new JLabel("41");
+	private JLabel coordenadasRoja = new JLabel("Coordenadas roja");
+	private JLabel coordenadasVerde = new JLabel("Coordenadas Verde");
+	private JLabel lbl_redBox = new JLabel("CasillaRojo");
+	private JLabel lbl_greenBox = new JLabel("Casilla Verde");
+	private JLabel resultDice = new JLabel("Result: ");
+	private JLabel imageDice = new JLabel("");
+	private int casillaRojo;
+	private int casillaVerde;
+	private int mueveFichas;
 
 	//	Connection
 	private Socket socket;
@@ -83,10 +89,9 @@ public class ViewGUI extends JFrame {
 	public ViewGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 1000);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
+
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		contentPane.add(initial_pane);
 		contentPane.add(parchis_pane);
@@ -94,24 +99,68 @@ public class ViewGUI extends JFrame {
 
 		initial_pane.setBounds(15, 15, 1381, 900);
 		initial_pane.setLayout(null);
-		initial_pane.setVisible(false);
+		initial_pane.add(lbl_wellcome);
+		initial_pane.add(lbl_menu);
 
+		initial_pane.add(btn_createPlay);
+		initial_pane.add(btn_joinPlay);
+		initial_pane.add(btn_exit);
+		
 		parchis_pane.setBounds(15, 15, 900, 900);
 		parchis_pane.setLayout(null);
-		parchis_pane.add(fichaVerde);
+		parchis_pane.add(redPiece);
+		parchis_pane.add(greenPiece);
+		
+		player_pane.setBounds(915, 15, 481, 900);
+		player_pane.setLayout(null);
+		player_pane.add(btn_moveRed);
+		player_pane.add(coordenadasRoja);
+		player_pane.add(coordenadasVerde);
+		player_pane.add(muestraIteracionRojo);
+		player_pane.add(muestraIteracionVerde);
+		player_pane.add(btn_moveGreen);
+		player_pane.add(lbl_redBox);
+		player_pane.add(lbl_greenBox);
+		player_pane.add(resultDice);
+		player_pane.add(imageDice);
+		player_pane.add(btn_rollDice);
+		
+		lbl_wellcome.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_wellcome.setBounds(564, 178, 252, 14);
+		
+		lbl_menu.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_menu.setBounds(559, 203, 263, 14);
+		
+		btn_createPlay.setBounds(636, 236, 108, 23);
+		btn_createPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		btn_joinPlay.setBounds(636, 270, 108, 23);
+		btn_joinPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		btn_exit.setBounds(636, 304, 108, 23);
+		btn_exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {dispose();}
+		});
 
-		fichaRoja.setBounds(100, 300, 28, 28);
-		fichaRoja.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		fichaRoja.setBackground(Color.RED);
+		redPiece.setBounds(100, 300, 28, 28);
+		redPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		redPiece.setBackground(Color.RED);
 
-		fichaVerde.setBounds(700, 567, 28, 28);
-		fichaVerde.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		fichaVerde.setBackground(new Color(124, 252, 0));
+		greenPiece.setBounds(700, 567, 28, 28);
+		greenPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		greenPiece.setBackground(new Color(124, 252, 0));
 
-		parchis_pane.add(fichaRoja);
 
-		botonOriginal.setBounds(100, 315, 105, 27);
-		btnMoverVerde.setBounds(100, 125, 109, 27);
+		btn_moveRed.setBounds(100, 315, 105, 27);
+		btn_moveGreen.setBounds(100, 125, 109, 27);
 		
 		muestraIteracionRojo.setBounds(100, 81, 14, 17);
 		muestraIteracionVerde.setBounds(100, 103, 14, 17);
@@ -119,16 +168,16 @@ public class ViewGUI extends JFrame {
 		coordenadasRoja.setBounds(100, 37, 104, 17);
 		coordenadasVerde.setBounds(100, 59, 116, 17);
 
-		lblCasillarojo.setBounds(100, 157, 66, 17);
-		lblCasillaVerde.setBounds(100, 179, 78, 17);
+		lbl_redBox.setBounds(100, 157, 66, 17);
+		lbl_greenBox.setBounds(100, 179, 78, 17);
 
 		resultDice.setBounds(100, 201, 60, 17);
 
 		imageDice.setBounds(100, 223, 319, 313);
 		imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
 
-		tirarDado.setBounds(100, 541, 96, 27);
-		tirarDado.addActionListener(new ActionListener() {
+		btn_rollDice.setBounds(100, 541, 96, 27);
+		btn_rollDice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				//It creates random number r
 				Random r = new Random();
@@ -141,38 +190,24 @@ public class ViewGUI extends JFrame {
 			}
 		});
 		
-		player_pane.setBounds(915, 15, 481, 900);
-		player_pane.setLayout(null);
-		player_pane.add(botonOriginal);
-		player_pane.add(coordenadasRoja);
-		player_pane.add(coordenadasVerde);
-		player_pane.add(muestraIteracionRojo);
-		player_pane.add(muestraIteracionVerde);
-		player_pane.add(btnMoverVerde);
-		player_pane.add(lblCasillarojo);
-		player_pane.add(lblCasillaVerde);
-		player_pane.add(resultDice);
-		player_pane.add(imageDice);
-		player_pane.add(tirarDado);
-		
-		btnMoverVerde.addActionListener(new ActionListener() {
+		btn_moveGreen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				movement(muestraIteracionVerde, casillaVerde, fichaVerde, coordenadasVerde);
+				movement(muestraIteracionVerde, casillaVerde, greenPiece, coordenadasVerde);
 			}
 		});
-		botonOriginal.addActionListener(new ActionListener() {
+		btn_moveRed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				movement(muestraIteracionRojo, casillaRojo, fichaRoja, coordenadasRoja);
+				movement(muestraIteracionRojo, casillaRojo, redPiece, coordenadasRoja);
 			}
 		});
 
 		//Escrito por MA
 
 		//estas dos de abajo se meten en un bucle y cada vez que se da al boton se iteran
-		referenciaCasillas1A20 = fichaRoja.getLocation();
-		referenciaCasillas21A40 = fichaRoja.getLocation();
-		referenciaCasillas41A60 = fichaRoja.getLocation();
-		referenciaCasillas61A80 = fichaRoja.getLocation();
+		referenciaCasillas1A20 = redPiece.getLocation();
+		referenciaCasillas21A40 = redPiece.getLocation();
+		referenciaCasillas41A60 = redPiece.getLocation();
+		referenciaCasillas61A80 = redPiece.getLocation();
 
 		referenciaCasillas1A20.setLocation(100,300);
 		referenciaCasillas21A40.setLocation(300, 750);
