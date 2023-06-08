@@ -154,7 +154,6 @@ public class ControllerWithoutThread {
 				}
 				
 				parchis.game.switchOwner();
-				
 				parchis.displayPlayers();
 			}
 			System.out.println("Winner: " + parchis.game.getWinner().getColor());

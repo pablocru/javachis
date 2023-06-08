@@ -1,8 +1,6 @@
 package version_1;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Image;
 import java.awt.Point;
 
 import javax.swing.JFrame;
@@ -26,6 +24,7 @@ public class VisualGUI extends JFrame {
 	Point referenciaCasillas41A60;
 	Point referenciaCasillas61A80;
 	JPanel fichaRoja = new JPanel();
+	JPanel fichaVerde = new JPanel();
 	int casillaRojo;
 	int casillaVerde;
 	int mueveFichas;
@@ -70,9 +69,7 @@ public class VisualGUI extends JFrame {
 		fichaRoja.setBackground(Color.RED);
 		fichaRoja.setBounds(100,300, 28, 28);
 		panel.add(fichaRoja);
-		fichaRoja.setLayout(null);
 
-		JPanel fichaVerde = new JPanel();
 		fichaVerde.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		fichaVerde.setBackground(new Color(124, 252, 0));
 		fichaVerde.setBounds(700, 567, 28, 28);
@@ -115,7 +112,6 @@ public class VisualGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				boolean in=true;
 				while (in) {
-
 					/*
 					 * Se ejecuta un bucle porque es necesario que haga un check del numero de casilla que tiene
 					 */
