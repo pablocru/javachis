@@ -115,7 +115,7 @@ public class ViewGUI extends JFrame {
 		coordenadasVerde.setBounds(100, 59, 116, 17);
 
 		JLabel muestraIteracionRojo = new JLabel("1");
-		muestraIteracionRojo.setBounds(100, 81, 7, 17);
+		muestraIteracionRojo.setBounds(100, 81, 14, 17);
 
 		JLabel lblCasillarojo = new JLabel("CasillaRojo");
 		lblCasillarojo.setBounds(100, 157, 66, 17);
@@ -124,7 +124,7 @@ public class ViewGUI extends JFrame {
 		lblCasillaVerde.setBounds(100, 179, 78, 17);
 
 		JLabel resultDice = new JLabel("Result: ");
-		resultDice.setBounds(100, 201, 44, 17);
+		resultDice.setBounds(100, 201, 60, 17);
 
 		JLabel imageDice = new JLabel("");
 		imageDice.setBounds(100, 223, 319, 313);
@@ -232,9 +232,11 @@ public class ViewGUI extends JFrame {
 				ficha.setLocation((int)referenciaCasillas61A80.getX()-29*(casilla-61), (int)referenciaCasillas61A80.getY());
 				in=false;
 			}				
-			if (casilla==81) {
-				muestraIteracion.setText("1");
+			if (casilla>=81) {
+				int res = casilla-80;
+				muestraIteracion.setText(Integer.toString(res));
 				casilla= Integer.parseInt(muestraIteracion.getText());
+				ficha.setLocation((int)casilla2.getX(), (int)casilla2.getY()+30*(casilla-1));
 			}
 			if (casilla==1) {
 				ficha.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
