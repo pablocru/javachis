@@ -30,9 +30,20 @@ public class ViewGUI extends JFrame {
 	Point referenciaCasillas61A80;
 	JPanel fichaRoja = new JPanel();
 	JPanel fichaVerde = new JPanel();
-	JPanel parchis_pane = new JPanelConFondoParchis("../img/Parchis_version_2.png");
 	JPanel initial_pane = new JPanel();
+	JPanel parchis_pane = new JPanelConFondoParchis("../img/Parchis_version_2.png");
 	JPanel player_pane = new JPanel();
+	JButton botonOriginal = new JButton("Mover Rojo");
+	JButton btnMoverVerde = new JButton("Mover Verde");
+	JButton tirarDado = new JButton("Tirar Dado");
+	JLabel muestraIteracionRojo = new JLabel("1");
+	JLabel muestraIteracionVerde = new JLabel("41");
+	JLabel coordenadasRoja = new JLabel("Coordenadas roja");
+	JLabel coordenadasVerde = new JLabel("Coordenadas Verde");
+	JLabel lblCasillarojo = new JLabel("CasillaRojo");
+	JLabel lblCasillaVerde = new JLabel("Casilla Verde");
+	JLabel resultDice = new JLabel("Result: ");
+	JLabel imageDice = new JLabel("");
 	int casillaRojo;
 	int casillaVerde;
 	int mueveFichas;
@@ -99,38 +110,23 @@ public class ViewGUI extends JFrame {
 
 		parchis_pane.add(fichaRoja);
 
-		JButton botonOriginal = new JButton("Mover Rojo");
 		botonOriginal.setBounds(100, 315, 105, 27);
-
-		JButton btnMoverVerde = new JButton("Mover Verde");
 		btnMoverVerde.setBounds(100, 125, 109, 27);
 		
-		JLabel muestraIteracionVerde = new JLabel("41");
+		muestraIteracionRojo.setBounds(100, 81, 14, 17);
 		muestraIteracionVerde.setBounds(100, 103, 14, 17);
 		
-		JLabel coordenadasRoja = new JLabel("Coordenadas roja");
 		coordenadasRoja.setBounds(100, 37, 104, 17);
-		
-		JLabel coordenadasVerde = new JLabel("Coordenadas Verde");
 		coordenadasVerde.setBounds(100, 59, 116, 17);
 
-		JLabel muestraIteracionRojo = new JLabel("1");
-		muestraIteracionRojo.setBounds(100, 81, 14, 17);
-
-		JLabel lblCasillarojo = new JLabel("CasillaRojo");
 		lblCasillarojo.setBounds(100, 157, 66, 17);
-
-		JLabel lblCasillaVerde = new JLabel("Casilla Verde");
 		lblCasillaVerde.setBounds(100, 179, 78, 17);
 
-		JLabel resultDice = new JLabel("Result: ");
 		resultDice.setBounds(100, 201, 60, 17);
 
-		JLabel imageDice = new JLabel("");
 		imageDice.setBounds(100, 223, 319, 313);
 		imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
 
-		JButton tirarDado = new JButton("Tirar Dado");
 		tirarDado.setBounds(100, 541, 96, 27);
 		tirarDado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
