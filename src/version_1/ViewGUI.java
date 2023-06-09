@@ -242,6 +242,8 @@ public class ViewGUI extends JFrame {
 		referenciaCasillas21A40.setLocation(300, 750);
 		referenciaCasillas41A60.setLocation(700,567);
 		referenciaCasillas61A80.setLocation(570, 146);
+		
+		this.switchVisible(false);
 	}
 
 	private void movement(JLabel muestraIteracion, int casilla, JPanel ficha, JLabel coordenadas) {
@@ -307,6 +309,12 @@ public class ViewGUI extends JFrame {
 		coordenadas.setText(ficha.getLocation()+"."); //EL PUNTO NO LO TOQUES, QUE SI NO, NO VA
 		//Se hace un setText de las coordenadas de la ficha, para ayudarnos con los puntos
 	}
+	
+	private void switchVisible(boolean visible) {
+		btn_move.setVisible(visible);
+		btn_rollDice.setVisible(visible);
+		lbl_imageDice.setVisible(visible);
+	}
 
 	private void createPlay() throws IOException, ClassNotFoundException {
 		this.whoAmI = 0;
@@ -361,5 +369,54 @@ public class ViewGUI extends JFrame {
 
 	private void messageDialog(String cta, String windowTitle) {
 		JOptionPane.showMessageDialog(contentPane, cta, windowTitle, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	private boolean isMyTurn() {return game.getTurnOwnerInt() == whoAmI;}
+	private boolean itsMe() {return game.getWinner().getWhoAmI() == whoAmI;}
+	
+	private void startPlay() throws ClassNotFoundException, IOException {
+		while(!this.game.isFinish()) {
+			turnOwner = this.game.getTurnOwnerPlayer();
+			color = turnOwner.getColor();
+			
+			System.out.println("Turn owner: " + color);
+			if (this.isMyTurn()) {
+				System.out.println("It's your turn");
+				
+				dice = this.game.rollDice();
+				System.out.println("Rolling dice... " + dice + "!!");
+				
+				if (turnOwner.isAnyoneHome()) {
+					if (dice == 5) {
+						System.out.println("You can take piece from home");
+						control = this.game.startPiece();
+					}
+					else control = 0;
+				}
+				else control = this.game.movePiece();
+				
+				switch(control) {
+				case 0: 
+					status = "can't move";
+					System.out.println("You " + status);
+				break;
+				default: 
+					status = "moves to " + control;
+					System.out.println("Your piece " + status);
+				break;
+				}
+				
+				this.output.writeObject(this.game);
+			}
+			else {
+				System.out.println("Waiting for " + color + "...");
+				this.setGame((Game) this.input.readObject());
+				System.out.println(color + " has taken " + dice + ": " + status);
+			}
+			
+			this.game.switchOwner();
+		}
+		System.out.println("Winner: " + this.game.getWinner().getColor());
+		System.out.println((this.itsMe() ? "Congratulations" : "Loser") + "!!");
 	}
 }
