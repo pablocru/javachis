@@ -7,15 +7,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
@@ -134,14 +138,30 @@ public class ViewGUI extends JFrame {
 		btn_createPlay.setBounds(636, 236, 108, 23);
 		btn_createPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					createPlay();
+					initial_pane.setVisible(false);
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		
 		btn_joinPlay.setBounds(636, 270, 108, 23);
 		btn_joinPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					joinPlay();
+					initial_pane.setVisible(false);
+				} catch (UnknownHostException e1) {
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -277,5 +297,60 @@ public class ViewGUI extends JFrame {
 		}
 		coordenadas.setText(ficha.getLocation()+"."); //EL PUNTO NO LO TOQUES, QUE SI NO, NO VA
 		//Se hace un setText de las coordenadas de la ficha, para ayudarnos con los puntos
+	}
+	
+	private void createPlay() throws IOException, ClassNotFoundException {
+		this.whoAmI = 0;
+		this.game = new Game(2);
+		this.game.joinPlayer(this.whoAmI);
+		this.setServer();
+		this.output.writeObject(this.game);
+		this.setGame((Game) this.input.readObject());
+	}
+	
+	private void joinPlay() throws UnknownHostException, IOException, ClassNotFoundException {
+		this.whoAmI = 1;
+		this.setClient();
+		this.setGame((Game) this.input.readObject());
+		this.game.joinPlayer(this.whoAmI);
+		this.output.writeObject(this.game);
+	}
+	
+	private void setClient() throws UnknownHostException, IOException {
+		socket = new Socket(IP, PORT);
+		this.messageDialog("Connecting to server" + socket.getInetAddress(), "Connection Status");
+
+		ObjectOutputStream();
+		ObjectInputStream();
+	}
+
+	private void setServer() throws IOException {
+		server = new ServerSocket(PORT);
+
+		this.messageDialog("Server waiting for a client...", "Connection Status");
+		socket = server.accept();
+		this.messageDialog("Connected to client" + socket.getInetAddress(), "Connection Status");
+
+		socket.setSoLinger(true, 10);
+
+		ObjectInputStream();
+		ObjectOutputStream();
+	}
+
+	private void ObjectInputStream() throws IOException {
+		input = new ObjectInputStream(socket.getInputStream());
+	}
+	private void ObjectOutputStream() throws IOException {
+		output = new ObjectOutputStream(socket.getOutputStream());
+	}
+	
+	private void setGame(Game game) {this.game = game;}
+	
+	private String inputDialog(String cta, String windowTitle) {
+		return JOptionPane.showInputDialog(contentPane, cta, windowTitle, JOptionPane.PLAIN_MESSAGE);
+	}
+	
+	private void messageDialog(String cta, String windowTitle) {
+		JOptionPane.showMessageDialog(contentPane, cta, windowTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
 }
