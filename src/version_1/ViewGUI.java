@@ -2,28 +2,27 @@ package version_1;
 
 import java.awt.EventQueue;
 import java.awt.Point;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.Color;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import javax.swing.border.LineBorder;
+import javax.swing.SwingConstants;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Random;
-import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
-import javax.swing.SwingConstants;
 
 public class ViewGUI extends JFrame {
 	//	Attributes
@@ -33,27 +32,28 @@ public class ViewGUI extends JFrame {
 	private Point referenciaCasillas41A60;
 	private Point referenciaCasillas61A80;
 	private JPanel contentPane = new JPanel();
-	private JPanel redPiece = new JPanel();
-	private JPanel greenPiece = new JPanel();
-	private JPanel initial_pane = new JPanel();
-	private JPanel parchis_pane = new JPanelConFondoParchis("../img/Parchis_version_2.png");
-	private JPanel player_pane = new JPanel();
+	private JPanel pane_redPiece = new JPanel();
+	private JPanel pane_greenPiece = new JPanel();
+	private JPanel pane_initial = new JPanel();
+	private JPanel pane_parchis = new JPanelConFondoParchis("../img/Parchis_version_2.png");
+	private JPanel pane_player = new JPanel();
 	private JButton btn_createPlay = new JButton("Create play");
 	private JButton btn_joinPlay = new JButton("Join play");
 	private JButton btn_exit = new JButton("Exit");
 	private JButton btn_moveRed = new JButton("Mover Rojo");
 	private JButton btn_moveGreen = new JButton("Mover Verde");
-	private JButton btn_rollDice = new JButton("Tirar Dado");
+	private JButton btn_move = new JButton("Move");
+	private JButton btn_rollDice = new JButton("Roll dice");
 	private JLabel lbl_wellcome = new JLabel("Wellcome to Javachis");
 	private JLabel lbl_menu = new JLabel("What do you want to do?");
-	private JLabel muestraIteracionRojo = new JLabel("1");
-	private JLabel muestraIteracionVerde = new JLabel("41");
-	private JLabel coordenadasRoja = new JLabel("Coordenadas roja");
-	private JLabel coordenadasVerde = new JLabel("Coordenadas Verde");
+	private JLabel lbl_muestraIteracionRojo = new JLabel("1");
+	private JLabel lbl_muestraIteracionVerde = new JLabel("41");
+	private JLabel lbl_coordenadasRoja = new JLabel("Coordenadas roja");
+	private JLabel lbl_coordenadasVerde = new JLabel("Coordenadas Verde");
 	private JLabel lbl_redBox = new JLabel("CasillaRojo");
 	private JLabel lbl_greenBox = new JLabel("Casilla Verde");
-	private JLabel resultDice = new JLabel("Result: ");
-	private JLabel imageDice = new JLabel("");
+	private JLabel lbl_resultDice = new JLabel("Result: ");
+	private JLabel lbl_imageDice = new JLabel("");
 	private int casillaRojo;
 	private int casillaVerde;
 	private int mueveFichas;
@@ -69,6 +69,13 @@ public class ViewGUI extends JFrame {
 	//	Parchis
 	private Game game;
 	private int whoAmI;
+
+	//	Static: used to show turn status to all players
+	private static String color;
+	private static int dice;
+	private static Player turnOwner;
+	private static int control;
+	private static String status;
 
 
 	/**
@@ -97,50 +104,73 @@ public class ViewGUI extends JFrame {
 
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
-		contentPane.add(initial_pane);
-		contentPane.add(parchis_pane);
-		contentPane.add(player_pane);
+		contentPane.add(pane_initial);
+		contentPane.add(pane_parchis);
+		contentPane.add(pane_player);
 
-		initial_pane.setBounds(15, 15, 1381, 900);
-		initial_pane.setLayout(null);
-		initial_pane.add(lbl_wellcome);
-		initial_pane.add(lbl_menu);
+		pane_initial.setBounds(15, 15, 1381, 900);
+		pane_initial.setLayout(null);
+		pane_initial.add(lbl_wellcome);
+		pane_initial.add(lbl_menu);
+		pane_initial.add(btn_createPlay);
+		pane_initial.add(btn_joinPlay);
+		pane_initial.add(btn_exit);
+		
+		pane_parchis.setBounds(15, 15, 900, 900);
+		pane_parchis.setLayout(null);
+		pane_parchis.add(pane_redPiece);
+		pane_parchis.add(pane_greenPiece);
+		
+		pane_player.setBounds(915, 15, 481, 900);
+		pane_player.setLayout(null);
+		pane_player.add(btn_moveRed);
+		pane_player.add(lbl_coordenadasRoja);
+		pane_player.add(lbl_coordenadasVerde);
+		pane_player.add(lbl_muestraIteracionRojo);
+		pane_player.add(lbl_muestraIteracionVerde);
+		pane_player.add(btn_moveGreen);
+		pane_player.add(lbl_redBox);
+		pane_player.add(lbl_greenBox);
+		pane_player.add(lbl_resultDice);
+		pane_player.add(lbl_imageDice);
+		pane_player.add(btn_rollDice);
+		pane_player.add(btn_move);
+		
+		pane_redPiece.setBounds(100, 300, 28, 28);
+		pane_redPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		pane_redPiece.setBackground(Color.RED);
 
-		initial_pane.add(btn_createPlay);
-		initial_pane.add(btn_joinPlay);
-		initial_pane.add(btn_exit);
-		
-		parchis_pane.setBounds(15, 15, 900, 900);
-		parchis_pane.setLayout(null);
-		parchis_pane.add(redPiece);
-		parchis_pane.add(greenPiece);
-		
-		player_pane.setBounds(915, 15, 481, 900);
-		player_pane.setLayout(null);
-		player_pane.add(btn_moveRed);
-		player_pane.add(coordenadasRoja);
-		player_pane.add(coordenadasVerde);
-		player_pane.add(muestraIteracionRojo);
-		player_pane.add(muestraIteracionVerde);
-		player_pane.add(btn_moveGreen);
-		player_pane.add(lbl_redBox);
-		player_pane.add(lbl_greenBox);
-		player_pane.add(resultDice);
-		player_pane.add(imageDice);
-		player_pane.add(btn_rollDice);
-		
+		pane_greenPiece.setBounds(700, 567, 28, 28);
+		pane_greenPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		pane_greenPiece.setBackground(new Color(124, 252, 0));
+
 		lbl_wellcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_wellcome.setBounds(564, 178, 252, 14);
-		
+
 		lbl_menu.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_menu.setBounds(559, 203, 263, 14);
 		
+		lbl_muestraIteracionRojo.setBounds(100, 81, 14, 17);
+		lbl_muestraIteracionVerde.setBounds(100, 103, 14, 17);
+
+		lbl_coordenadasRoja.setBounds(100, 37, 104, 17);
+		lbl_coordenadasVerde.setBounds(100, 59, 116, 17);
+
+		lbl_redBox.setBounds(100, 157, 66, 17);
+		lbl_greenBox.setBounds(100, 179, 78, 17);
+
+		lbl_resultDice.setBounds(100, 201, 60, 17);
+
+		lbl_imageDice.setBounds(81, 543, 319, 313);
+		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
+
 		btn_createPlay.setBounds(636, 236, 108, 23);
 		btn_createPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					btn_joinPlay.setEnabled(true);
 					createPlay();
-					initial_pane.setVisible(false);
+					pane_initial.setVisible(false);
 				} catch (ClassNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -148,13 +178,14 @@ public class ViewGUI extends JFrame {
 				}
 			}
 		});
-		
+
 		btn_joinPlay.setBounds(636, 270, 108, 23);
 		btn_joinPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					btn_createPlay.setEnabled(true);
 					joinPlay();
-					initial_pane.setVisible(false);
+					pane_initial.setVisible(false);
 				} catch (UnknownHostException e1) {
 					e1.printStackTrace();
 				} catch (ClassNotFoundException e1) {
@@ -164,70 +195,48 @@ public class ViewGUI extends JFrame {
 				}
 			}
 		});
-		
+
 		btn_exit.setBounds(636, 304, 108, 23);
 		btn_exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {dispose();}
 		});
 
-		redPiece.setBounds(100, 300, 28, 28);
-		redPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		redPiece.setBackground(Color.RED);
-
-		greenPiece.setBounds(700, 567, 28, 28);
-		greenPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		greenPiece.setBackground(new Color(124, 252, 0));
-
-
-		btn_moveRed.setBounds(100, 315, 105, 27);
-		btn_moveGreen.setBounds(100, 125, 109, 27);
-		
-		muestraIteracionRojo.setBounds(100, 81, 14, 17);
-		muestraIteracionVerde.setBounds(100, 103, 14, 17);
-		
-		coordenadasRoja.setBounds(100, 37, 104, 17);
-		coordenadasVerde.setBounds(100, 59, 116, 17);
-
-		lbl_redBox.setBounds(100, 157, 66, 17);
-		lbl_greenBox.setBounds(100, 179, 78, 17);
-
-		resultDice.setBounds(100, 201, 60, 17);
-
-		imageDice.setBounds(100, 223, 319, 313);
-		imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
-
-		btn_rollDice.setBounds(100, 541, 96, 27);
+		btn_rollDice.setBounds(188, 489, 105, 27);
 		btn_rollDice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	
-				//It creates random number r
-				Random r = new Random();
-				//It sets int mueveFichas with a number from 0 to 5, but it adds 1, so it's from 1 to 6
-				mueveFichas = r.nextInt(1, 7);
-				//It sets resultDice text
-				resultDice.setText("Result: "+mueveFichas);	
-				//it sets Icon 
-				imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice" + mueveFichas + ".png")));
+			public void actionPerformed(ActionEvent e) {
+				dice = game.rollDice();
+				
+				lbl_resultDice.setText("Result: "+ dice);
+				lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice" + dice + ".png")));
 			}
 		});
-		
+		btn_move.setBounds(188, 429, 105, 27);
+		btn_move.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				game.movePiece();
+				
+			}
+		});
+		btn_moveGreen.setBounds(100, 125, 109, 27);
 		btn_moveGreen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				movement(muestraIteracionVerde, casillaVerde, greenPiece, coordenadasVerde);
+				movement(lbl_muestraIteracionVerde, casillaVerde, pane_greenPiece, lbl_coordenadasVerde);
 			}
 		});
+		btn_moveRed.setBounds(272, 125, 105, 27);
 		btn_moveRed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				movement(muestraIteracionRojo, casillaRojo, redPiece, coordenadasRoja);
+				movement(lbl_muestraIteracionRojo, casillaRojo, pane_redPiece, lbl_coordenadasRoja);
 			}
 		});
 
 		//Escrito por MA
 
 		//estas dos de abajo se meten en un bucle y cada vez que se da al boton se iteran
-		referenciaCasillas1A20 = redPiece.getLocation();
-		referenciaCasillas21A40 = redPiece.getLocation();
-		referenciaCasillas41A60 = redPiece.getLocation();
-		referenciaCasillas61A80 = redPiece.getLocation();
+		referenciaCasillas1A20 = pane_redPiece.getLocation();
+		referenciaCasillas21A40 = pane_redPiece.getLocation();
+		referenciaCasillas41A60 = pane_redPiece.getLocation();
+		referenciaCasillas61A80 = pane_redPiece.getLocation();
 
 		referenciaCasillas1A20.setLocation(100,300);
 		referenciaCasillas21A40.setLocation(300, 750);
@@ -298,7 +307,7 @@ public class ViewGUI extends JFrame {
 		coordenadas.setText(ficha.getLocation()+"."); //EL PUNTO NO LO TOQUES, QUE SI NO, NO VA
 		//Se hace un setText de las coordenadas de la ficha, para ayudarnos con los puntos
 	}
-	
+
 	private void createPlay() throws IOException, ClassNotFoundException {
 		this.whoAmI = 0;
 		this.game = new Game(2);
@@ -307,7 +316,7 @@ public class ViewGUI extends JFrame {
 		this.output.writeObject(this.game);
 		this.setGame((Game) this.input.readObject());
 	}
-	
+
 	private void joinPlay() throws UnknownHostException, IOException, ClassNotFoundException {
 		this.whoAmI = 1;
 		this.setClient();
@@ -315,7 +324,7 @@ public class ViewGUI extends JFrame {
 		this.game.joinPlayer(this.whoAmI);
 		this.output.writeObject(this.game);
 	}
-	
+
 	private void setClient() throws UnknownHostException, IOException {
 		socket = new Socket(IP, PORT);
 		this.messageDialog("Connecting to server" + socket.getInetAddress(), "Connection Status");
@@ -343,13 +352,13 @@ public class ViewGUI extends JFrame {
 	private void ObjectOutputStream() throws IOException {
 		output = new ObjectOutputStream(socket.getOutputStream());
 	}
-	
+
 	private void setGame(Game game) {this.game = game;}
-	
+
 	private String inputDialog(String cta, String windowTitle) {
 		return JOptionPane.showInputDialog(contentPane, cta, windowTitle, JOptionPane.PLAIN_MESSAGE);
 	}
-	
+
 	private void messageDialog(String cta, String windowTitle) {
 		JOptionPane.showMessageDialog(contentPane, cta, windowTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
