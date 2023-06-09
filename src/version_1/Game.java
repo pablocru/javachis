@@ -62,8 +62,12 @@ public class Game implements Serializable {
 			boxes[i]=new Box(i);
 	}
 	
-	public void rollDice() {
-		this.dice = r.nextInt(1, 7);
+	public int rollDice() {
+		int dice = r.nextInt(1, 7);
+		
+		this.dice = dice;
+		
+		return dice;
 	}
 	
 	public void switchOwner() {
