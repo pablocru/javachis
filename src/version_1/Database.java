@@ -21,7 +21,17 @@ public class Database {
 		//password is alumnoalumno
 		String password="alumnoalumno";
 		String query="SELECT * from  resultsTable";
-
+		
+		//necesito traer dos cosas del juego: el nombre del jugador local y si ha ganado la partida
+		//este ejemplo hay que cambiarlo al ejemplo del jugador local
+		Player myPlayer = new Player("example1", 0);
+		boolean haveIWon=true;
+		
+		//primero se realiza un select username de la tabla para que saque todos los username
+		
+		
+		
+		
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
