@@ -6,12 +6,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class Database {
+	private ArrayList<String> usernameArray = new ArrayList<>();
+
+	
+
+	public Database() {
+	}
+
+	public ArrayList<String> getUsernameArray() {
+		return usernameArray;
+	}
+
+	public void setUsernameArray(ArrayList<String> usernameArray) {
+		this.usernameArray = usernameArray;
+	}
+
 	public static void main (String [] args) throws ClassNotFoundException {
 		//here is the code for database connection
-
+		Database myDatabase = new Database();
+		//ejemplo de añadido al string
+//		myDatabase.usernameArray[0]="hola";
+//		System.out.println(myDatabase.usernameArray[0]);
 		//starting connection
 		Connection connection=null;
 		//url of the database: javachis is the DB name
@@ -44,8 +63,8 @@ public class Database {
 			e.printStackTrace();
 		} 
 
-		showingData(connection, url, user, password);
-
+//		showingData(connection, url, user, password);
+		savingUsernamesIntoAnArray(connection, url, user, password, myDatabase);
 	}
 	public static void showingData (Connection connection, String url, String user, String password) {
 		try {
@@ -62,6 +81,23 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-
+	
+	//method for saving usernames into an array
+	public static void savingUsernamesIntoAnArray (Connection connection, String url, String user, String password, Database exampleDatabase) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection=DriverManager.getConnection(url,user,password); 
+			System.out.println("connected");
+			Statement sentence=connection.createStatement();
+			ResultSet rs=sentence.executeQuery("SELECT username, wonGames FROM resultsTable");
+			while (rs.next()) {
+				System.out.println(rs.getString("username"));
+				String usernameToAdd = rs.getString("username");
+				exampleDatabase.usernameArray.add(usernameToAdd);
+			}
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}
+	}
 
 }
