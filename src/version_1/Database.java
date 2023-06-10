@@ -15,20 +15,20 @@ public class Database {
 		//starting connection
 		Connection connection=null;
 		//url of the database: javachis is the DB name
-		String url="jdbc:mysql://localhost:3306/javachis"+ ""; 
+		String url="jdbc:mysql://localhost:33306/javachis"+ ""; 
 		//user of the database: root is selected
 		String user="root";
 		//password is alumnoalumno
 		String password="alumnoalumno";
 		String query="SELECT * from  resultsTable";
 		
-		//necesito traer dos cosas del juego: el nombre del jugador local y si ha ganado la partida
-		//este ejemplo hay que cambiarlo al ejemplo del jugador local
-		Player myPlayer = new Player("example1", 0);
-		boolean haveIWon=true;
-		
-		//primero se realiza un select username de la tabla para que saque todos los username
-		
+//		//necesito traer dos cosas del juego: el nombre del jugador local y si ha ganado la partida
+//		//este ejemplo hay que cambiarlo al ejemplo del jugador local
+//		Player myPlayer = new Player("example1", 0);
+//		boolean haveIWon=true;
+//		
+//		//primero se realiza un select username de la tabla para que saque todos los username
+//		
 		
 		
 		
@@ -53,9 +53,9 @@ public class Database {
 			connection=DriverManager.getConnection(url,user,password); 
 			System.out.println("connected");
 			Statement sentence=connection.createStatement();
-			ResultSet rs=sentence.executeQuery("SELECT title, author FROM books");
+			ResultSet rs=sentence.executeQuery("SELECT username, wonGames FROM resultsTable");
 			while (rs.next()) {
-				System.out.println(rs.getString("title")+", "+rs.getString("author"));
+				System.out.println(rs.getString("username")+", "+rs.getString("wonGames"));
 				//tambien se puede hacer con numeros dependiendo del orden que tenga en la tabla la columna del atributo que se quiere seleccionar
 			}
 		} catch (Exception e) { 
