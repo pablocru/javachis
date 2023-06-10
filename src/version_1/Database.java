@@ -25,7 +25,7 @@ public class Database {
 		this.usernameArray = usernameArray;
 	}
 
-	public static void main (String [] args) throws ClassNotFoundException {
+	public static void main (String [] args) {
 		//here is the code for database connection
 		Database myDatabase = new Database();
 		//ejemplo de añadido al string
@@ -53,7 +53,7 @@ public class Database {
 		boolean winOrLose = true;
 		if (isPlayerInArrayList(myDatabase)) {
 			updatingDatabase (myDatabase,player,winOrLose);
-		}else  insertingPlayerInDatabase (myDatabase,player,winOrLose)
+		}else  insertingPlayerInDatabase (myDatabase,player,winOrLose);
 		
 		showingData(myDatabase);
 	}
