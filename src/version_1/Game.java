@@ -14,6 +14,8 @@ public class Game implements Serializable {
 	private boolean isFinish = false;
 	private Player winner;
 	private Random r = new Random();
+	private String status;
+	private int currentMove;
 
 //	Constructors
 	public Game(int numberOfPlayers) {
@@ -21,6 +23,11 @@ public class Game implements Serializable {
 		this.createBoxes();
 		r.setSeed(System.currentTimeMillis());
 	}
+	
+//	Setters
+	public void setStatus(String status) {this.status = status;}
+	
+	public void setCurrentMove(int currentMove) {this.currentMove = currentMove;}
 
 //	Getters
 	public Player[] getPlayers() {return players;}
@@ -49,6 +56,10 @@ public class Game implements Serializable {
 	public Player getWinner() {return this.winner;}
 	
 	public int getDice() {return this.dice;}
+	
+	public String getStatus() {return this.status;}
+	
+	public int getCurrentMove() {return this.currentMove;}
 	
 //	Methods
 	public void joinPlayer(int whoAmI) {

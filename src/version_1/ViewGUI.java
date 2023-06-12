@@ -67,12 +67,12 @@ public class ViewGUI extends JFrame {
 	private Game game;
 	private int whoAmI;
 
-	//	Static: used to show turn status to all players
-	private static String color;
-	private static int dice;
-	private static Player turnOwner;
-	private static int newPosition = 1; //QUITALO
-	private static String status;
+	//	Used to show turn status to all players
+	private String color;
+	private int dice;
+	private Player turnOwner;
+	private int newPosition;
+	private String status;
 
 
 	/**
@@ -222,10 +222,17 @@ public class ViewGUI extends JFrame {
 					break;
 				}
 				
-				updateStatus("Te lo envio");
+				disableButtons();
+				game.setStatus(color + " has taken " + dice + ": " + status);
+				game.setCurrentMove(newPosition);
+				game.switchOwner();
 				try {
 					output.writeObject(game);
+					
+					initiateTurn();
 				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -318,7 +325,15 @@ public class ViewGUI extends JFrame {
 		else {
 			this.updateStatus("Waiting for " + color + "...");
 			this.setGame((Game) this.input.readObject());
-			this.updateStatus(color + " has taken " + game.getDice());
+			this.updateStatus(this.game.getStatus());
+			
+			newPosition = this.game.getCurrentMove();
+			if (newPosition != 0) {
+				if (color.equals("red")) move(pane_redPiece);
+				else move(pane_greenPiece);
+			}
+			this.updateStatus(this.game.getPlayerByColor("green").getPieces()[0].getPosition() + "");
+			initiateTurn();
 		}
 	}
 

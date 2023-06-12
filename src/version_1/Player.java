@@ -27,12 +27,12 @@ public class Player implements Serializable {
 			this.startingBox = RED_STARTING_BOX;
 			break;
 		case 1: 
-			this.color = "yellow";
-			this.startingBox = YELLOW_STARTING_BOX;
-			break;
-		case 2:
 			this.color = "green";
 			this.startingBox = GREEN_STARTING_BOX;
+			break;
+		case 2:
+			this.color = "yellow";
+			this.startingBox = YELLOW_STARTING_BOX;
 			break;
 		case 3:
 			this.color = "blue";
