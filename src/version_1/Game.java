@@ -110,6 +110,8 @@ public class Game implements Serializable {
 			if (piece.getPosition() == owner.getStartingBox()) {
 				this.isFinish = true;
 				this.winner = owner;
+				
+				newPosition = -1;
 			}
 		}
 		

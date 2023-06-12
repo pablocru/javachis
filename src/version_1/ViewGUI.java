@@ -117,6 +117,37 @@ public class ViewGUI extends JFrame {
 		lbl_menu.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_menu.setBounds(559, 203, 263, 14);
 
+		contentPane.add(pane_parchis);
+		contentPane.add(pane_player);
+
+		pane_parchis.setBounds(15, 15, 900, 900);
+		pane_parchis.setLayout(null);
+		pane_parchis.add(pane_redPiece);
+		pane_parchis.add(pane_greenPiece);
+
+		pane_player.setBounds(915, 15, 481, 900);
+		pane_player.setLayout(null);
+		pane_player.add(lbl_imageDice);
+		pane_player.add(btn_rollDice);
+		pane_player.add(btn_move);
+		pane_player.add(scrollPane);
+
+		pane_redPiece.setBounds(100, 300, 28, 28);
+		pane_redPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		pane_redPiece.setBackground(Color.RED);
+
+		pane_greenPiece.setBounds(700, 567, 28, 28);
+		pane_greenPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		pane_greenPiece.setBackground(new Color(124, 252, 0));
+
+		textArea_status.setEditable(false);
+
+		scrollPane.setViewportView(textArea_status);
+		scrollPane.setBounds(34, 28, 413, 248);
+
+		lbl_imageDice.setBounds(81, 480, 319, 313);
+		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
+
 		btn_createPlay.setBounds(636, 236, 108, 23);
 		btn_createPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -155,84 +186,20 @@ public class ViewGUI extends JFrame {
 		btn_exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {dispose();}
 		});
-		contentPane.add(pane_parchis);
-		contentPane.add(pane_player);
-
-		pane_parchis.setBounds(15, 15, 900, 900);
-		pane_parchis.setLayout(null);
-		pane_parchis.add(pane_redPiece);
-		pane_parchis.add(pane_greenPiece);
-
-		pane_player.setBounds(915, 15, 481, 900);
-		pane_player.setLayout(null);
-		pane_player.add(lbl_imageDice);
-		pane_player.add(btn_rollDice);
-		pane_player.add(btn_move);
-		pane_player.add(scrollPane);
-
-		pane_redPiece.setBounds(100, 300, 28, 28);
-		pane_redPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		pane_redPiece.setBackground(Color.RED);
-
-		pane_greenPiece.setBounds(700, 567, 28, 28);
-		pane_greenPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		pane_greenPiece.setBackground(new Color(124, 252, 0));
-
-		textArea_status.setEditable(false);
-
-		scrollPane.setViewportView(textArea_status);
-		scrollPane.setBounds(34, 28, 413, 248);
-
-		lbl_imageDice.setBounds(81, 480, 319, 313);
-		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
 
 		btn_rollDice.setBounds(188, 399, 105, 27);
 		btn_rollDice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dice = game.rollDice();
-				lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice" + dice + ".png")));
-				updateStatus("Rolling dice... " + dice + "!!");
-				enableMove();
-			}
+			public void actionPerformed(ActionEvent e) {rollDice();}
 		});
 
 		btn_move.setBounds(188, 335, 105, 27);
 		btn_move.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (turnOwner.isAnyoneHome()) {
-					if (dice == 5) {
-						updateStatus("You can take piece from home");
-						newPosition = game.startPiece();
-					}
-					else newPosition = 0;
-				}
-				else newPosition = game.movePiece();
-				
-				switch(newPosition) {
-				case 0: 
-					status = "can't move";
-					updateStatus("You " + status);
-					break;
-				default: 
-					status = "moves to " + newPosition;
-					updateStatus("Your piece " + status);
-					
-					if (color.equals("red")) move(pane_redPiece);
-					else move(pane_greenPiece);
-					break;
-				}
-				
-				disableButtons();
-				game.setStatus(color + " has taken " + dice + ": " + status);
-				game.setCurrentMove(newPosition);
-				game.switchOwner();
 				try {
-					output.writeObject(game);
-					
-					initiateTurn();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+					executeTurn();
 				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -301,10 +268,6 @@ public class ViewGUI extends JFrame {
 
 	private void setGame(Game game) {this.game = game;}
 
-	private String inputDialog(String cta, String windowTitle) {
-		return JOptionPane.showInputDialog(contentPane, cta, windowTitle, JOptionPane.PLAIN_MESSAGE);
-	}
-
 	private void messageDialog(String cta, String windowTitle) {
 		JOptionPane.showMessageDialog(contentPane, cta, windowTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -317,7 +280,7 @@ public class ViewGUI extends JFrame {
 		color = turnOwner.getColor();
 
 		this.updateStatus("Turn owner: " + color);
-		
+
 		if (this.isMyTurn()) {
 			this.updateStatus("It's your turn");
 			this.enableDice();
@@ -326,14 +289,65 @@ public class ViewGUI extends JFrame {
 			this.updateStatus("Waiting for " + color + "...");
 			this.setGame((Game) this.input.readObject());
 			this.updateStatus(this.game.getStatus());
-			
+
 			newPosition = this.game.getCurrentMove();
 			if (newPosition != 0) {
 				if (color.equals("red")) move(pane_redPiece);
 				else move(pane_greenPiece);
 			}
-			this.updateStatus(this.game.getPlayerByColor("green").getPieces()[0].getPosition() + "");
 			initiateTurn();
+		}
+	}
+
+	private void rollDice() {
+		dice = game.rollDice();
+		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice" + dice + ".png")));
+		updateStatus("Rolling dice... " + dice + "!!");
+		enableMove();
+	}
+
+	private void executeTurn() throws IOException, ClassNotFoundException {
+		if (turnOwner.isAnyoneHome()) {
+			if (dice == 5) {
+				updateStatus("You can take piece from home");
+				newPosition = game.startPiece();
+			}
+			else newPosition = 0;
+		}
+		else newPosition = game.movePiece();
+
+		switch(newPosition) {
+		case -1:
+			status = "End of game";
+			updateStatus(status);
+			break;
+		case 0: 
+			status = "can't move";
+			updateStatus("You " + status);
+			break;
+		default: 
+			status = "moves to " + newPosition;
+			updateStatus("Your piece " + status);
+
+			if (color.equals("red")) move(pane_redPiece);
+			else move(pane_greenPiece);
+
+			break;
+		}
+
+		disableButtons();
+
+		if (newPosition != -1) {
+			game.setStatus(color + " has taken " + dice + ": " + status);
+			game.switchOwner();
+			game.setCurrentMove(newPosition);
+			output.writeObject(game);
+			initiateTurn();
+		}
+		else {
+			game.setStatus(color + " has won the game");
+			game.setCurrentMove(newPosition);
+			output.writeObject(game);
 		}
 	}
 
@@ -354,78 +368,5 @@ public class ViewGUI extends JFrame {
 		else if (newPosition<81) {
 			pane_piece.setLocation((int)referenciaCasillas61A80.getX() - 29 * (newPosition - 61), (int)referenciaCasillas61A80.getY());
 		}
-		
-//		boolean in = true;
-//		while (in) {	
-//			in = false;
-//
-//			Point casilla2 = new Point(100, 302);
-//			Point casilla22 = new Point(300, 750);
-//			Point casilla42 = new Point(700, 567);
-
-			//			if (newPosition<21) {
-			//				if (newPosition == 1) {
-			//					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-			//				}
-			//				else {
-			//					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY() - 30 * (newPosition - 1));
-			//				}
-			//			}
-			//			else if (newPosition<41) {
-			//				if (newPosition == 21) {
-			//					pane_piece.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
-			//				}
-			//				else {
-			//					pane_piece.setLocation((int)referenciaCasillas21A40.getX() + 29 * (newPosition - 21), (int)referenciaCasillas21A40.getY());
-			//				}
-			//			}
-			//			else if (newPosition<61) {
-			//				if (newPosition==41) {
-			//				pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
-			//			}
-			//			else {
-			//				pane_piece.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(newPosition-41));
-			//			}
-			//			}
-			//			else if (newPosition<81) {
-			//				
-			//			}
-
-//			if (newPosition<21) {
-//				if (newPosition==1) {
-//					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-//				}
-//				else {
-//					pane_piece.setLocation((int)casilla2.getX(), (int)casilla2.getY()-30*(newPosition-1));
-//				}
-//			}
-//			else if (newPosition<41) {
-//				if (newPosition==21) {
-//					pane_piece.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
-//
-//				}
-//				else {
-//					pane_piece.setLocation((int)casilla22.getX()+29*(newPosition-21), (int)casilla22.getY());
-//				}
-//			}
-//			else if (newPosition<61) {
-//				if (newPosition==41) {
-//					pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
-//				}
-//				else {
-//					pane_piece.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(newPosition-41));
-//				}
-//			}
-//			else if (newPosition<81) {
-//				pane_piece.setLocation((int)referenciaCasillas61A80.getX()-29*(newPosition-61), (int)referenciaCasillas61A80.getY());
-//			}				
-//			else if (newPosition==81) {
-//				newPosition = 1;
-//				in=true;
-//			}
-//			else if (newPosition==1) {
-//				pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-//			}
-//		}
 	}
 }
