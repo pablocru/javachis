@@ -23,14 +23,18 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class ViewGUI extends JFrame {
 	//	Attributes
 	//	Frame
-	private Point referenciaCasillas1A20;
-	private Point referenciaCasillas21A40;
-	private Point referenciaCasillas41A60;
-	private Point referenciaCasillas61A80;
+	private Point referenciaCasillas1A20 = new Point(100,300);
+	private Point referenciaCasillas21A40 = new Point(300, 750);
+	private Point referenciaCasillas41A60 = new Point(700,567);
+	private Point referenciaCasillas61A80 = new Point(570, 146);
 	private JPanel contentPane = new JPanel();
 	private JPanel pane_redPiece = new JPanel();
 	private JPanel pane_greenPiece = new JPanel();
@@ -40,20 +44,13 @@ public class ViewGUI extends JFrame {
 	private JButton btn_createPlay = new JButton("Create play");
 	private JButton btn_joinPlay = new JButton("Join play");
 	private JButton btn_exit = new JButton("Exit");
-	private JButton btn_moveRed = new JButton("Mover Rojo");
-	private JButton btn_moveGreen = new JButton("Mover Verde");
 	private JButton btn_move = new JButton("Move");
 	private JButton btn_rollDice = new JButton("Roll dice");
 	private JLabel lbl_wellcome = new JLabel("Wellcome to Javachis");
 	private JLabel lbl_menu = new JLabel("What do you want to do?");
-	private JLabel lbl_muestraIteracionRojo = new JLabel("1");
-	private JLabel lbl_muestraIteracionVerde = new JLabel("41");
-	private JLabel lbl_coordenadasRoja = new JLabel("Coordenadas roja");
-	private JLabel lbl_coordenadasVerde = new JLabel("Coordenadas Verde");
-	private JLabel lbl_redBox = new JLabel("CasillaRojo");
-	private JLabel lbl_greenBox = new JLabel("Casilla Verde");
-	private JLabel lbl_resultDice = new JLabel("Result: ");
 	private JLabel lbl_imageDice = new JLabel("");
+	private JScrollPane scrollPane = new JScrollPane();
+	private JTextArea textArea_status = new JTextArea();
 	private int casillaRojo;
 	private int casillaVerde;
 	private int mueveFichas;
@@ -74,7 +71,7 @@ public class ViewGUI extends JFrame {
 	private static String color;
 	private static int dice;
 	private static Player turnOwner;
-	private static int control;
+	private static int newPosition;
 	private static String status;
 
 
@@ -105,8 +102,6 @@ public class ViewGUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		contentPane.add(pane_initial);
-		contentPane.add(pane_parchis);
-		contentPane.add(pane_player);
 
 		pane_initial.setBounds(15, 15, 1381, 900);
 		pane_initial.setLayout(null);
@@ -115,54 +110,12 @@ public class ViewGUI extends JFrame {
 		pane_initial.add(btn_createPlay);
 		pane_initial.add(btn_joinPlay);
 		pane_initial.add(btn_exit);
-		
-		pane_parchis.setBounds(15, 15, 900, 900);
-		pane_parchis.setLayout(null);
-		pane_parchis.add(pane_redPiece);
-		pane_parchis.add(pane_greenPiece);
-		
-		pane_player.setBounds(915, 15, 481, 900);
-		pane_player.setLayout(null);
-		pane_player.add(btn_moveRed);
-		pane_player.add(lbl_coordenadasRoja);
-		pane_player.add(lbl_coordenadasVerde);
-		pane_player.add(lbl_muestraIteracionRojo);
-		pane_player.add(lbl_muestraIteracionVerde);
-		pane_player.add(btn_moveGreen);
-		pane_player.add(lbl_redBox);
-		pane_player.add(lbl_greenBox);
-		pane_player.add(lbl_resultDice);
-		pane_player.add(lbl_imageDice);
-		pane_player.add(btn_rollDice);
-		pane_player.add(btn_move);
-		
-		pane_redPiece.setBounds(100, 300, 28, 28);
-		pane_redPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		pane_redPiece.setBackground(Color.RED);
-
-		pane_greenPiece.setBounds(700, 567, 28, 28);
-		pane_greenPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		pane_greenPiece.setBackground(new Color(124, 252, 0));
 
 		lbl_wellcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_wellcome.setBounds(564, 178, 252, 14);
 
 		lbl_menu.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_menu.setBounds(559, 203, 263, 14);
-		
-		lbl_muestraIteracionRojo.setBounds(100, 81, 14, 17);
-		lbl_muestraIteracionVerde.setBounds(100, 103, 14, 17);
-
-		lbl_coordenadasRoja.setBounds(100, 37, 104, 17);
-		lbl_coordenadasVerde.setBounds(100, 59, 116, 17);
-
-		lbl_redBox.setBounds(100, 157, 66, 17);
-		lbl_greenBox.setBounds(100, 179, 78, 17);
-
-		lbl_resultDice.setBounds(100, 201, 60, 17);
-
-		lbl_imageDice.setBounds(81, 543, 319, 313);
-		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
 
 		btn_createPlay.setBounds(636, 236, 108, 23);
 		btn_createPlay.addActionListener(new ActionListener() {
@@ -171,6 +124,7 @@ public class ViewGUI extends JFrame {
 					btn_joinPlay.setEnabled(true);
 					createPlay();
 					pane_initial.setVisible(false);
+					initiateTurn();
 				} catch (ClassNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -186,6 +140,7 @@ public class ViewGUI extends JFrame {
 					btn_createPlay.setEnabled(true);
 					joinPlay();
 					pane_initial.setVisible(false);
+					initiateTurn();
 				} catch (UnknownHostException e1) {
 					e1.printStackTrace();
 				} catch (ClassNotFoundException e1) {
@@ -200,120 +155,77 @@ public class ViewGUI extends JFrame {
 		btn_exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {dispose();}
 		});
+		contentPane.add(pane_parchis);
+		contentPane.add(pane_player);
 
-		btn_rollDice.setBounds(188, 489, 105, 27);
+		pane_parchis.setBounds(15, 15, 900, 900);
+		pane_parchis.setLayout(null);
+		pane_parchis.add(pane_redPiece);
+		pane_parchis.add(pane_greenPiece);
+
+		pane_player.setBounds(915, 15, 481, 900);
+		pane_player.setLayout(null);
+		pane_player.add(lbl_imageDice);
+		pane_player.add(btn_rollDice);
+		pane_player.add(btn_move);
+		pane_player.add(scrollPane);
+
+		pane_redPiece.setBounds(100, 300, 28, 28);
+		pane_redPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		pane_redPiece.setBackground(Color.RED);
+
+		pane_greenPiece.setBounds(700, 567, 28, 28);
+		pane_greenPiece.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		pane_greenPiece.setBackground(new Color(124, 252, 0));
+
+		textArea_status.setEditable(false);
+
+		scrollPane.setViewportView(textArea_status);
+		scrollPane.setBounds(34, 28, 413, 248);
+
+		lbl_imageDice.setBounds(81, 480, 319, 313);
+		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
+
+		btn_rollDice.setBounds(188, 399, 105, 27);
 		btn_rollDice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice = game.rollDice();
-				
-				lbl_resultDice.setText("Result: "+ dice);
 				lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice" + dice + ".png")));
+				updateStatus("Rolling dice... " + dice + "!!");
+				try {
+					output.writeObject(game);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
-		btn_move.setBounds(188, 429, 105, 27);
+
+		btn_move.setBounds(188, 335, 105, 27);
 		btn_move.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				game.movePiece();
-				
-			}
-		});
-		btn_moveGreen.setBounds(100, 125, 109, 27);
-		btn_moveGreen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				movement(lbl_muestraIteracionVerde, casillaVerde, pane_greenPiece, lbl_coordenadasVerde);
-			}
-		});
-		btn_moveRed.setBounds(272, 125, 105, 27);
-		btn_moveRed.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				movement(lbl_muestraIteracionRojo, casillaRojo, pane_redPiece, lbl_coordenadasRoja);
+				updateStatus("Te lo envio");
+				try {
+					output.writeObject(game);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 
-		//Escrito por MA
-
-		//estas dos de abajo se meten en un bucle y cada vez que se da al boton se iteran
-		referenciaCasillas1A20 = pane_redPiece.getLocation();
-		referenciaCasillas21A40 = pane_redPiece.getLocation();
-		referenciaCasillas41A60 = pane_redPiece.getLocation();
-		referenciaCasillas61A80 = pane_redPiece.getLocation();
-
-		referenciaCasillas1A20.setLocation(100,300);
-		referenciaCasillas21A40.setLocation(300, 750);
-		referenciaCasillas41A60.setLocation(700,567);
-		referenciaCasillas61A80.setLocation(570, 146);
-		
-		this.switchVisible(false);
+		disableButtons();
 	}
 
-	private void movement(JLabel muestraIteracion, int casilla, JPanel ficha, JLabel coordenadas) {
-		//Se ejecuta un bucle porque es necesario que haga un check del numero de casilla que tiene
-		boolean in=true;
-		while (in) {
-			//el label que muestra la iteracion
-			muestraIteracion.setText(String.valueOf(Integer.parseInt(muestraIteracion.getText())+mueveFichas));
-
-			//variable que se necesita para no hacer un gettext de muestraIteracion
-			casilla = Integer.parseInt(muestraIteracion.getText()); 	
-
-			//estos puntos no se para que están muy bien, pero los dejo ahi por si acaso 
-			Point casilla2= new Point(100, 302);
-			Point casilla22=new Point(300, 750);
-			Point casilla42=new Point(700, 567);
-
-			if (casilla<21) {
-				if (casilla==1) {
-					//esta es la primera casilla del bloque, que es diferente a las demás
-					ficha.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-					//cuando es 1, se hace un set de las referencias vacias
-				}
-				else {
-					//si no es la 1, se hace un setter de las referencias mas una suma del numero de casillas de diferencia que tiene con la primera del bloque (que es la 1)
-					ficha.setLocation((int)casilla2.getX(), (int)casilla2.getY()+30*(casilla-1));
-				}
-				//cuando esto se da, el bucle pasa a false
-				in=false;
-			}else if (casilla<41) {
-				if (casilla==21) {
-					ficha.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
-
-				}
-				else {
-					ficha.setLocation((int)casilla22.getX()+29*(casilla-21), (int)casilla22.getY());
-				}
-				in=false;
-			}else if (casilla<61) {
-				if (casilla==41) {
-					ficha.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
-				}
-				else {
-					ficha.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(casilla-41));
-				}
-				in=false;
-			}else if (casilla<81) {
-				ficha.setLocation((int)referenciaCasillas61A80.getX()-29*(casilla-61), (int)referenciaCasillas61A80.getY());
-				in=false;
-			}				
-			if (casilla>=81) {
-				int res = casilla-80;
-				muestraIteracion.setText(Integer.toString(res));
-				casilla= Integer.parseInt(muestraIteracion.getText());
-				ficha.setLocation((int)casilla2.getX(), (int)casilla2.getY()+30*(casilla-1));
-			}
-			if (casilla==1) {
-				ficha.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-
-			}
-			in=false;
-		}
-		coordenadas.setText(ficha.getLocation()+"."); //EL PUNTO NO LO TOQUES, QUE SI NO, NO VA
-		//Se hace un setText de las coordenadas de la ficha, para ayudarnos con los puntos
-	}
-	
-	private void switchVisible(boolean visible) {
-		btn_move.setVisible(visible);
-		btn_rollDice.setVisible(visible);
-		lbl_imageDice.setVisible(visible);
+	private void disableButtons() {
+		btn_move.setEnabled(false);
+		btn_rollDice.setEnabled(false);
+	}	
+	private void enableDice() {
+		btn_move.setEnabled(false);
+		btn_rollDice.setEnabled(true);
+	}	
+	private void enableMove() {
+		btn_move.setEnabled(true);
+		btn_rollDice.setEnabled(false);
 	}
 
 	private void createPlay() throws IOException, ClassNotFoundException {
@@ -370,53 +282,103 @@ public class ViewGUI extends JFrame {
 	private void messageDialog(String cta, String windowTitle) {
 		JOptionPane.showMessageDialog(contentPane, cta, windowTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+
 	private boolean isMyTurn() {return game.getTurnOwnerInt() == whoAmI;}
 	private boolean itsMe() {return game.getWinner().getWhoAmI() == whoAmI;}
-	
-	private void startPlay() throws ClassNotFoundException, IOException {
-		while(!this.game.isFinish()) {
-			turnOwner = this.game.getTurnOwnerPlayer();
-			color = turnOwner.getColor();
-			
-			System.out.println("Turn owner: " + color);
-			if (this.isMyTurn()) {
-				System.out.println("It's your turn");
-				
-				dice = this.game.rollDice();
-				System.out.println("Rolling dice... " + dice + "!!");
-				
-				if (turnOwner.isAnyoneHome()) {
-					if (dice == 5) {
-						System.out.println("You can take piece from home");
-						control = this.game.startPiece();
-					}
-					else control = 0;
-				}
-				else control = this.game.movePiece();
-				
-				switch(control) {
-				case 0: 
-					status = "can't move";
-					System.out.println("You " + status);
-				break;
-				default: 
-					status = "moves to " + control;
-					System.out.println("Your piece " + status);
-				break;
-				}
-				
-				this.output.writeObject(this.game);
-			}
-			else {
-				System.out.println("Waiting for " + color + "...");
-				this.setGame((Game) this.input.readObject());
-				System.out.println(color + " has taken " + dice + ": " + status);
-			}
-			
-			this.game.switchOwner();
+
+	private void initiateTurn() throws ClassNotFoundException, IOException {
+		turnOwner = this.game.getTurnOwnerPlayer();
+		color = turnOwner.getColor();
+
+		this.updateStatus("Turn owner: " + color);
+		
+		if (this.isMyTurn()) {
+			this.updateStatus("It's your turn");
+			this.enableDice();
 		}
-		System.out.println("Winner: " + this.game.getWinner().getColor());
-		System.out.println((this.itsMe() ? "Congratulations" : "Loser") + "!!");
+		else {
+			this.updateStatus("Waiting for " + color + "...");
+			input.readObject();
+			this.updateStatus(color + " has taken " + dice );
+		}
+	}
+
+	private void updateStatus(String status) {
+		textArea_status.setText(textArea_status.getText() + status + "\n");
+	}
+
+	private void move(JPanel pane_piece) {
+		boolean in = true;
+		while (in) {	
+			in = false;
+
+			Point casilla2 = new Point(100, 302);
+			Point casilla22 = new Point(300, 750);
+			Point casilla42 = new Point(700, 567);
+
+			//			if (newPosition<21) {
+			//				if (newPosition == 1) {
+			//					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
+			//				}
+			//				else {
+			//					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY() - 30 * (newPosition - 1));
+			//				}
+			//			}
+			//			else if (newPosition<41) {
+			//				if (newPosition == 21) {
+			//					pane_piece.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
+			//				}
+			//				else {
+			//					pane_piece.setLocation((int)referenciaCasillas21A40.getX() + 29 * (newPosition - 21), (int)referenciaCasillas21A40.getY());
+			//				}
+			//			}
+			//			else if (newPosition<61) {
+			//				if (newPosition==41) {
+			//				pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
+			//			}
+			//			else {
+			//				pane_piece.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(newPosition-41));
+			//			}
+			//			}
+			//			else if (newPosition<81) {
+			//				
+			//			}
+
+			if (newPosition<21) {
+				if (newPosition==1) {
+					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
+				}
+				else {
+					pane_piece.setLocation((int)casilla2.getX(), (int)casilla2.getY()-30*(newPosition-1));
+				}
+			}
+			else if (newPosition<41) {
+				if (newPosition==21) {
+					pane_piece.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
+
+				}
+				else {
+					pane_piece.setLocation((int)casilla22.getX()+29*(newPosition-21), (int)casilla22.getY());
+				}
+			}
+			else if (newPosition<61) {
+				if (newPosition==41) {
+					pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
+				}
+				else {
+					pane_piece.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(newPosition-41));
+				}
+			}
+			else if (newPosition<81) {
+				pane_piece.setLocation((int)referenciaCasillas61A80.getX()-29*(newPosition-61), (int)referenciaCasillas61A80.getY());
+			}				
+			else if (newPosition==81) {
+				newPosition = 1;
+				in=true;
+			}
+			else if (newPosition==1) {
+				pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
+			}
+		}
 	}
 }

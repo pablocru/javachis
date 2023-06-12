@@ -59,7 +59,7 @@ public class VisualGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel panel = new JPanelConFondoParchis("Parchis_version_2.png");
+		JPanel panel = new JPanelConFondoParchis("../img/Parchis_version_2.png");
 		panel.setBounds(15, 15, 900, 900);
 		contentPane.add(panel);
 		panel.setLayout(null);
@@ -116,10 +116,14 @@ public class VisualGUI extends JFrame {
 					 * Se ejecuta un bucle porque es necesario que haga un check del numero de casilla que tiene
 					 */
 					
+					System.out.println(muestraIteracionRojo.getText() + ", " + mueveFichas);
+					
 					muestraIteracionRojo.setText(String.valueOf(Integer.parseInt(muestraIteracionRojo.getText())+mueveFichas)); //el label que muestra la iteracion
 
 					casillaRojo = Integer.parseInt(muestraIteracionRojo.getText()); //variable auxiliar que se necesita para no hacer un gettext de muestraIteracion	
 
+					System.out.println(muestraIteracionRojo.getText());
+					
 					Point casilla2= new Point(100,302); //estos puntos no se para que están muy bien, pero los dejo ahi por si acaso 
 					Point casilla22=new Point(300, 750);
 					Point casilla42=new Point(700,567);
@@ -244,7 +248,7 @@ public class VisualGUI extends JFrame {
 		contentPane.add(resultDice);
 		
 		JLabel imageDice = new JLabel("");
-		imageDice.setIcon(new ImageIcon(VisualGUI.class.getResource("/version_1/dice1.png")));
+		imageDice.setIcon(new ImageIcon(VisualGUI.class.getResource("../img/dice1.png")));
 		imageDice.setBounds(986, 525, 371, 371);
 		contentPane.add(imageDice);
 
@@ -258,7 +262,7 @@ public class VisualGUI extends JFrame {
 				//It sets resultDice text
 				resultDice.setText("Result: "+mueveFichas);	
 				//it sets Icon 
-				imageDice.setIcon(new ImageIcon(VisualGUI.class.getResource("/version_1/dice"+mueveFichas+".png")));
+				imageDice.setIcon(new ImageIcon(VisualGUI.class.getResource("../img/dice"+mueveFichas+".png")));
 			}
 		});
 		tirarDado.setBounds(986, 462, 105, 27);
