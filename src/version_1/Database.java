@@ -28,7 +28,7 @@ public class Database {
 	public static void main (String [] args) {
 		//here is the code for database connection
 		Database myDatabase = new Database();
-		
+
 		//datos del usuario de ejemplo que vamos a introducir: nombre, numero y si gana
 		Player playerExample = new Player ("Ejemplo",1);
 		Player playerExample2 = new Player ("OtroEjemplo", 1);
@@ -41,7 +41,7 @@ public class Database {
 		String user="root";
 		//password is alumnoalumno
 		String password="alumnoalumno";
-		
+
 		//starting connection
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -52,25 +52,27 @@ public class Database {
 
 		//First of all: saving database usernames (primary keys) into an array
 		savingUsernamesIntoAnArray(myDatabase);
-		
+
 		//para ver los datos dentro del array list
 		System.out.println(myDatabase.usernameArray.toString());
-		
+
 		//if the player is in the array list, there is an update. If not, an insertion.
 		if (isPlayerInArrayList(myDatabase, playerExample)) {
 			updatingDatabase (myDatabase,playerExample,iWon);
 		}else  insertingPlayerInDatabase (myDatabase,playerExample,iWon);
-		
-		showingData(myDatabase);
-		
+
+		showingDatabaseUsernames(myDatabase);
+
 	}
 
-	public static void showingData (Database exampleDatabase) {
-		//este metodo servirá para mostrar los datos en la interfaz
+	public static void showingDatabaseUsernames (Database exampleDatabase) {
+		//este metodo servirá para mostrar los datos de la base de datos en la interfaz
 		try {
 			System.out.println("connected. Showing usernames from database");
-			Statement sentence=exampleDatabase.connection.createStatement();
-			ResultSet rs=sentence.executeQuery("SELECT username, wonGames FROM resultsTable");
+
+			String query="SELECT username FROM resultsTable";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				System.out.println(rs.getString("username"));
 			}
@@ -83,9 +85,11 @@ public class Database {
 	public static void savingUsernamesIntoAnArray (Database exampleDatabase) {
 		try {
 			System.out.println("connected. Adding usernames to ArrayList");
-			Statement sentence=exampleDatabase.connection.createStatement();
 
-			ResultSet rs=sentence.executeQuery("SELECT username FROM resultsTable");
+			String query="SELECT username FROM resultsTable";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+
 			while (rs.next()) {
 				String usernameToAdd = rs.getString("username");
 				exampleDatabase.usernameArray.add(usernameToAdd);
@@ -115,24 +119,32 @@ public class Database {
 
 		//aqui hago un select de las partidas ganadas y lo guardo en la variable previamente inicializada
 		try {
-			Statement sentence=exampleDatabase.connection.createStatement();
-			ResultSet rs=sentence.executeQuery("SELECT wonGames FROM resultsTable WHERE username ='"+username+"'");
+			String query = "SELECT wonGames FROM resultsTable WHERE username = ?";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			statement.setString(1, username);
+
+			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				wonGames = rs.getInt("wonGames");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		//aqui hago un select de las partidas jugadas y lo guardo en la otra variable previamente inicializada
 		try {
-			Statement sentence=exampleDatabase.connection.createStatement();
-			ResultSet rs=sentence.executeQuery("SELECT playedGames FROM resultsTable WHERE username ='"+username+"'");
+			String query = "SELECT playedGames FROM resultsTable WHERE username = ?";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			statement.setString(1, username);
+
+			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				playedGames = rs.getInt("playedGames");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 
 		//aqui creo dos variables de los valores de partidas ganadas y jugadas actualizada, porque las necesito para el UPDATE
 		int wonGamesUpdated;
@@ -149,18 +161,28 @@ public class Database {
 
 		//update de los playedGames
 		try {
-			Statement sentence=exampleDatabase.connection.createStatement();
-			sentence.executeUpdate("UPDATE resultsTable SET playedGames = "+playedGamesUpdated+" WHERE username ='"+username+"'");
+			String query = "UPDATE resultsTable SET playedGames = ? WHERE username = ?";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			statement.setInt(1, playedGamesUpdated);
+			statement.setString(2, username);
+
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		//update de los wonGames
 		try {
-			Statement sentence=exampleDatabase.connection.createStatement();
-			sentence.executeUpdate("UPDATE resultsTable SET wonGames = "+wonGamesUpdated+" WHERE username ='"+username+"'");
+			String query = "UPDATE resultsTable SET wonGames = ? WHERE username = ?";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			statement.setInt(1, wonGamesUpdated);
+			statement.setString(2, username);
+
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 
 	}
 
@@ -168,7 +190,7 @@ public class Database {
 		//aqui se hace el insert del jugador en la database. Se accede SOLO CUANDO EL JUGADOR NO EXISTE
 		//si ha ganado, se pone 1 en wonGames y a playedGames
 		//si ha perdido, se pone 1 solo en playedGames
-		
+
 		//se crea variable de playedGames inicializada a 1
 		int playedGames=1;
 		//se crea variable wonGames, que depende de si el jugador ha tenido la victoria en su primera partida para ser 0 o 1. 
@@ -176,15 +198,21 @@ public class Database {
 		if (iWon) {
 			wonGames=1;
 		}
-		
+
 		//insert del jugador
 		try {
-			Statement sentence=exampleDatabase.connection.createStatement();
-			sentence.executeUpdate("INSERT INTO resultsTable VALUES ('"+player.getName()+"',"+wonGames+","+playedGames+")");
+			String query = "INSERT INTO resultsTable VALUES (?, ?, ?)";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			statement.setString(1, player.getName());
+			statement.setInt(2, wonGames);
+			statement.setInt(3, playedGames);
+
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
+
 	}
 }
