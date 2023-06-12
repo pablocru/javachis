@@ -31,11 +31,12 @@ public class Database {
 		
 		//datos del usuario de ejemplo que vamos a introducir: nombre, numero y si gana
 		Player playerExample = new Player ("Ejemplo",1);
-		boolean iWon=true;
+		Player playerExample2 = new Player ("OtroEjemplo", 1);
+		boolean iWon=false;
 
 
 		//url of the database: javachis is the DB name
-		String url="jdbc:mysql://localhost:33306/javachis"+ ""; 
+		String url="jdbc:mysql://localhost:4306/javachis"+ ""; 
 		//user of the database: root is selected
 		String user="root";
 		//password is alumnoalumno
@@ -59,7 +60,7 @@ public class Database {
 		if (isPlayerInArrayList(myDatabase, playerExample)) {
 			updatingDatabase (myDatabase,playerExample,iWon);
 		}else  insertingPlayerInDatabase (myDatabase,playerExample,iWon);
-
+		
 		showingData(myDatabase);
 		
 	}
@@ -116,7 +117,9 @@ public class Database {
 		try {
 			Statement sentence=exampleDatabase.connection.createStatement();
 			ResultSet rs=sentence.executeQuery("SELECT wonGames FROM resultsTable WHERE username ='"+username+"'");
-			wonGames = rs.getInt("wonGames");
+			if (rs.next()) {
+				wonGames = rs.getInt("wonGames");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -124,7 +127,9 @@ public class Database {
 		try {
 			Statement sentence=exampleDatabase.connection.createStatement();
 			ResultSet rs=sentence.executeQuery("SELECT playedGames FROM resultsTable WHERE username ='"+username+"'");
-			playedGames = rs.getInt("playedGames");
+			if (rs.next()) {
+				playedGames = rs.getInt("playedGames");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -145,14 +150,14 @@ public class Database {
 		//update de los playedGames
 		try {
 			Statement sentence=exampleDatabase.connection.createStatement();
-			sentence.executeUpdate("UPDATE resultsTable SET playedGames = "+playedGamesUpdated+"WHERE username ='"+username+"'");
+			sentence.executeUpdate("UPDATE resultsTable SET playedGames = "+playedGamesUpdated+" WHERE username ='"+username+"'");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		//update de los wonGames
 		try {
 			Statement sentence=exampleDatabase.connection.createStatement();
-			sentence.executeUpdate("UPDATE resultsTable SET wonGames = "+wonGamesUpdated+"WHERE username ='"+username+"'");
+			sentence.executeUpdate("UPDATE resultsTable SET wonGames = "+wonGamesUpdated+" WHERE username ='"+username+"'");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
