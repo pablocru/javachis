@@ -71,7 +71,7 @@ public class ViewGUI extends JFrame {
 	private static String color;
 	private static int dice;
 	private static Player turnOwner;
-	private static int newPosition;
+	private static int newPosition = 1; //QUITALO
 	private static String status;
 
 
@@ -192,17 +192,36 @@ public class ViewGUI extends JFrame {
 				dice = game.rollDice();
 				lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice" + dice + ".png")));
 				updateStatus("Rolling dice... " + dice + "!!");
-				try {
-					output.writeObject(game);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				enableMove();
 			}
 		});
 
 		btn_move.setBounds(188, 335, 105, 27);
 		btn_move.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (turnOwner.isAnyoneHome()) {
+					if (dice == 5) {
+						updateStatus("You can take piece from home");
+						newPosition = game.startPiece();
+					}
+					else newPosition = 0;
+				}
+				else newPosition = game.movePiece();
+				
+				switch(newPosition) {
+				case 0: 
+					status = "can't move";
+					updateStatus("You " + status);
+					break;
+				default: 
+					status = "moves to " + newPosition;
+					updateStatus("Your piece " + status);
+					
+					if (color.equals("red")) move(pane_redPiece);
+					else move(pane_greenPiece);
+					break;
+				}
+				
 				updateStatus("Te lo envio");
 				try {
 					output.writeObject(game);
@@ -298,8 +317,8 @@ public class ViewGUI extends JFrame {
 		}
 		else {
 			this.updateStatus("Waiting for " + color + "...");
-			input.readObject();
-			this.updateStatus(color + " has taken " + dice );
+			this.setGame((Game) this.input.readObject());
+			this.updateStatus(color + " has taken " + game.getDice());
 		}
 	}
 
@@ -308,13 +327,26 @@ public class ViewGUI extends JFrame {
 	}
 
 	private void move(JPanel pane_piece) {
-		boolean in = true;
-		while (in) {	
-			in = false;
-
-			Point casilla2 = new Point(100, 302);
-			Point casilla22 = new Point(300, 750);
-			Point casilla42 = new Point(700, 567);
+		if (newPosition<21) {
+			pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY() + 30 * (newPosition - 1));			
+		}
+		else if (newPosition<41) {
+			pane_piece.setLocation((int)referenciaCasillas21A40.getX() + 29 * (newPosition - 21), (int)referenciaCasillas21A40.getY());
+		}
+		else if (newPosition<61) {
+			pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY() - 29 * (newPosition - 41));
+		}
+		else if (newPosition<81) {
+			pane_piece.setLocation((int)referenciaCasillas61A80.getX() - 29 * (newPosition - 61), (int)referenciaCasillas61A80.getY());
+		}
+		
+//		boolean in = true;
+//		while (in) {	
+//			in = false;
+//
+//			Point casilla2 = new Point(100, 302);
+//			Point casilla22 = new Point(300, 750);
+//			Point casilla42 = new Point(700, 567);
 
 			//			if (newPosition<21) {
 			//				if (newPosition == 1) {
@@ -344,41 +376,41 @@ public class ViewGUI extends JFrame {
 			//				
 			//			}
 
-			if (newPosition<21) {
-				if (newPosition==1) {
-					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-				}
-				else {
-					pane_piece.setLocation((int)casilla2.getX(), (int)casilla2.getY()-30*(newPosition-1));
-				}
-			}
-			else if (newPosition<41) {
-				if (newPosition==21) {
-					pane_piece.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
-
-				}
-				else {
-					pane_piece.setLocation((int)casilla22.getX()+29*(newPosition-21), (int)casilla22.getY());
-				}
-			}
-			else if (newPosition<61) {
-				if (newPosition==41) {
-					pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
-				}
-				else {
-					pane_piece.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(newPosition-41));
-				}
-			}
-			else if (newPosition<81) {
-				pane_piece.setLocation((int)referenciaCasillas61A80.getX()-29*(newPosition-61), (int)referenciaCasillas61A80.getY());
-			}				
-			else if (newPosition==81) {
-				newPosition = 1;
-				in=true;
-			}
-			else if (newPosition==1) {
-				pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
-			}
-		}
+//			if (newPosition<21) {
+//				if (newPosition==1) {
+//					pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
+//				}
+//				else {
+//					pane_piece.setLocation((int)casilla2.getX(), (int)casilla2.getY()-30*(newPosition-1));
+//				}
+//			}
+//			else if (newPosition<41) {
+//				if (newPosition==21) {
+//					pane_piece.setLocation((int)referenciaCasillas21A40.getX(), (int)referenciaCasillas21A40.getY());
+//
+//				}
+//				else {
+//					pane_piece.setLocation((int)casilla22.getX()+29*(newPosition-21), (int)casilla22.getY());
+//				}
+//			}
+//			else if (newPosition<61) {
+//				if (newPosition==41) {
+//					pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY());
+//				}
+//				else {
+//					pane_piece.setLocation((int)casilla42.getX(), (int)casilla42.getY()-29*(newPosition-41));
+//				}
+//			}
+//			else if (newPosition<81) {
+//				pane_piece.setLocation((int)referenciaCasillas61A80.getX()-29*(newPosition-61), (int)referenciaCasillas61A80.getY());
+//			}				
+//			else if (newPosition==81) {
+//				newPosition = 1;
+//				in=true;
+//			}
+//			else if (newPosition==1) {
+//				pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY());
+//			}
+//		}
 	}
 }
