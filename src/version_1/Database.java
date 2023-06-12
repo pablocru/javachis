@@ -25,15 +25,9 @@ public class Database {
 		this.usernameArray = usernameArray;
 	}
 
-	public static void main (String [] args) {
-		//here is the code for database connection
+	public static void executeDatabase (Player player, boolean didIWin) {
+		//It creates a database
 		Database myDatabase = new Database();
-
-		//datos del usuario de ejemplo que vamos a introducir: nombre, numero y si gana
-		Player playerExample = new Player ("Ejemplo",1);
-		Player playerExample2 = new Player ("OtroEjemplo", 1);
-		boolean iWon=false;
-
 
 		//url of the database: javachis is the DB name
 		String url="jdbc:mysql://localhost:4306/javachis"+ ""; 
@@ -53,16 +47,13 @@ public class Database {
 		//First of all: saving database usernames (primary keys) into an array
 		savingUsernamesIntoAnArray(myDatabase);
 
-		//para ver los datos dentro del array list
-		System.out.println(myDatabase.usernameArray.toString());
-
 		//if the player is in the array list, there is an update. If not, an insertion.
-		if (isPlayerInArrayList(myDatabase, playerExample)) {
-			updatingDatabase (myDatabase,playerExample,iWon);
-		}else  insertingPlayerInDatabase (myDatabase,playerExample,iWon);
+		if (isPlayerInArrayList(myDatabase, player)) {
+			updatingDatabase (myDatabase,player,didIWin);
+		}else  insertingPlayerInDatabase (myDatabase,player,didIWin);
 
-		showingDatabaseUsernames(myDatabase);
-
+		//if wanting to show the usernames stored in our database:
+		//showingDatabaseUsernames(myDatabase);
 	}
 
 	public static void showingDatabaseUsernames (Database exampleDatabase) {
