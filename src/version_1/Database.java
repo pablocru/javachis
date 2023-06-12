@@ -118,33 +118,10 @@ public class Database {
 		int playedGames=0;
 
 		//aqui hago un select de las partidas ganadas y lo guardo en la variable previamente inicializada
-		try {
-			String query = "SELECT wonGames FROM resultsTable WHERE username = ?";
-			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
-			statement.setString(1, username);
-
-			ResultSet rs = statement.executeQuery();
-			if (rs.next()) {
-				wonGames = rs.getInt("wonGames");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		wonGames=queryWonGamesOfUsername(exampleDatabase,  player);
 
 		//aqui hago un select de las partidas jugadas y lo guardo en la otra variable previamente inicializada
-		try {
-			String query = "SELECT playedGames FROM resultsTable WHERE username = ?";
-			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
-			statement.setString(1, username);
-
-			ResultSet rs = statement.executeQuery();
-			if (rs.next()) {
-				playedGames = rs.getInt("playedGames");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+		playedGames=queryPlayedGamesOfUsername(exampleDatabase,  player);
 
 		//aqui creo dos variables de los valores de partidas ganadas y jugadas actualizada, porque las necesito para el UPDATE
 		int wonGamesUpdated;
@@ -211,8 +188,44 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static int queryWonGamesOfUsername(Database exampleDatabase, Player player) {
+		String username=player.getName();
+		int wonGames=0;
 
+		//aqui hago un select de las partidas ganadas y lo guardo en la variable previamente inicializada
+		try {
+			String query = "SELECT wonGames FROM resultsTable WHERE username = ?";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			statement.setString(1, username);
 
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				wonGames = rs.getInt("wonGames");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return wonGames;
+	}
+	public static int queryPlayedGamesOfUsername(Database exampleDatabase, Player player) {
+		String username=player.getName();
+		int playedGames=0;
 
+		//aqui hago un select de las partidas ganadas y lo guardo en la variable previamente inicializada
+		try {
+			String query = "SELECT playedGames FROM resultsTable WHERE username = ?";
+			PreparedStatement statement = exampleDatabase.connection.prepareStatement(query);
+			statement.setString(1, username);
+
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				playedGames = rs.getInt("playedGames");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return playedGames;
 	}
 }
