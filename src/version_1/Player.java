@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class Player implements Serializable {
-//	Attributes
+	//	Attributes
 	protected static final int RED_STARTING_BOX = 1;
 	protected static final int YELLOW_STARTING_BOX = 21;
 	protected static final int GREEN_STARTING_BOX = 41;
@@ -14,13 +14,13 @@ public class Player implements Serializable {
 	private Piece [] pieces = new Piece[1];
 	private int startingBox;
 	private int whoAmI;
-	
-//	Constructors
+
+	//	Constructors
 	public Player(String name, int whoAmI) {
 		this.name = name;
 		this.setPieces();
 		this.whoAmI = whoAmI;
-		
+
 		switch(whoAmI) {
 		case 0:
 			this.color = "red";
@@ -39,46 +39,46 @@ public class Player implements Serializable {
 			this.startingBox = BLUE_STARTING_BOX;
 			break;
 		}
-		
+
 	}
 
-//	Setters
+	//	Setters
 	public void setPieces() {
 		this.pieces[0] = new Piece(1, 0);
 	}
-	
-//	Getters
+
+	//	Getters
 	public String getColor() {return color;}
 
 	public String getName() {return name;}
-	
+
 	public int getStartingBox() {return this.startingBox;}
 
 	public Piece [] getPieces() {return pieces;}
-	
+
 	public int getWhoAmI() {return this.whoAmI;}
-	
+
 	public Piece getPieceFromHome() {
 		boolean lock = true;
 		Piece piece = null;
-		
+
 		for (int i = 0; lock && i < pieces.length; i++) {			
 			if (pieces[i].getPosition() == 0) {
 				piece = pieces[i];
 				lock = false;
 			}
 		}
-		
+
 		return piece;
 	}
-	
-//	Methods
+
+	//	Methods
 	public boolean isAnyoneHome() {
 		boolean isInHome = false;
-		
+
 		for (int i = 0; !isInHome && i < this.pieces.length; i++)
 			if (pieces[i].getPosition() == 0) isInHome = true;
-		
+
 		return isInHome;		
 	}
 
@@ -86,5 +86,21 @@ public class Player implements Serializable {
 	public String toString() {
 		return "color: " + color + ", name: " + name + ", pieces: " + Arrays.toString(pieces) + ", startingBox: "
 				+ startingBox;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEq = false;
+
+		if (obj instanceof Player) {
+			Player other = (Player) obj;
+
+			isEq =
+					name.equals(other.name) &&
+					color.equals(other.color) &&
+					whoAmI == other.whoAmI;
+		}
+		
+		return isEq;
 	}
 }
