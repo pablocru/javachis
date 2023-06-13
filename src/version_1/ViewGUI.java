@@ -27,6 +27,7 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JTable;
 
 public class ViewGUI extends JFrame {
 	//	Attributes
@@ -73,6 +74,7 @@ public class ViewGUI extends JFrame {
 	private Player turnOwner;
 	private int newPosition;
 	private String status;
+	private JTable tableResults;
 
 
 	/**
@@ -148,7 +150,7 @@ public class ViewGUI extends JFrame {
 		lbl_imageDice.setBounds(81, 480, 319, 313);
 		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice1.png")));
 
-		btn_createPlay.setBounds(636, 236, 108, 23);
+		btn_createPlay.setBounds(636, 236, 110, 25);
 		btn_createPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -164,7 +166,7 @@ public class ViewGUI extends JFrame {
 			}
 		});
 
-		btn_joinPlay.setBounds(636, 270, 108, 23);
+		btn_joinPlay.setBounds(636, 270, 110, 25);
 		btn_joinPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -182,7 +184,11 @@ public class ViewGUI extends JFrame {
 			}
 		});
 
-		btn_exit.setBounds(636, 304, 108, 23);
+		btn_exit.setBounds(636, 339, 110, 25);
+		
+		JButton btn_data = new JButton("Statistics");
+		btn_data.setBounds(636, 304, 110, 25);
+		pane_initial.add(btn_data);
 		btn_exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {dispose();}
 		});
@@ -193,6 +199,15 @@ public class ViewGUI extends JFrame {
 		});
 
 		btn_move.setBounds(188, 335, 105, 27);
+		
+		JPanel pane_data = new JPanel();
+		pane_data.setBounds(15, 15, 1381, 900);
+		contentPane.add(pane_data);
+		pane_data.setLayout(null);
+		
+		tableResults = new JTable();
+		tableResults.setBounds(0, 0, 1, 1);
+		pane_data.add(tableResults);
 		btn_move.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
