@@ -121,7 +121,7 @@ public class ControllerWithoutThread {
 				if (parchis.isMyTurn()) {
 					System.out.println("It's your turn");
 					
-					dice = parchis.game.rollDice();
+					dice = parchis.game.rollCheatDice();
 					System.out.println("Rolling dice... " + dice + "!!");
 					
 					if (turnOwner.isAnyoneHome()) {
