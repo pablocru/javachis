@@ -18,22 +18,14 @@ public class ReadingOtherPlayer extends Thread {
 		try {
 			boolean lock = true;
 
-			ObjectInputStream oI = parchis.getInput();
+			ObjectInputStream oI =parchis.getInput();
 			while(lock) {
-				parchis.updateStatus("Waiting for " + parchis.getColor() + "...");
 				Object ob = oI.readObject();
 
 				if (ob instanceof Game) {
-					Game game = (Game) ob;
-					parchis.setGame(game);
+					parchis.setGame((Game) ob);
 					
-					parchis.updateStatus(game.getStatus());
-
-					int newPosition = game.getCurrentMove();
-					if (newPosition != 0) {
-						parchis.movePiece();
-					}
-					parchis.initiateTurn();
+					parchis.updateTurn();
 				}
 				else lock = false;	
 			}

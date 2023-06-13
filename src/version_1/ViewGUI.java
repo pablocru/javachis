@@ -57,7 +57,7 @@ public class ViewGUI extends JFrame {
 	private ServerSocket server;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
-	private final int PORT = 4306; //pc clase pablo: 4306; pc otro (que no se cual es): 5005; portatil MA: 33306
+	private final int PORT = 5005;
 	private final String IP = "127.0.0.1";
 
 	//	Parchis
@@ -71,15 +71,18 @@ public class ViewGUI extends JFrame {
 	private int newPosition;
 	private String status;
 	
-	//Setters
+	// Setters
 	public void setGame(Game game) {this.game = game;}
 	
 	public void setNewPosition(int newPosition) {this.newPosition = newPosition;}
-
+	
 	// Getters
-	public String getColor() {return this.color;}
+	public int getNewPosition() {return this.newPosition;}
 	
 	public ObjectInputStream getInput() {return this.input;}
+	
+	public Game getGame() {return this.game;}
+
 
 
 	public static void main(String[] args) {
@@ -95,9 +98,6 @@ public class ViewGUI extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public ViewGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 1000);
@@ -232,8 +232,9 @@ public class ViewGUI extends JFrame {
 		this.setServer();
 		this.output.writeObject(this.game);
 		this.setGame((Game) this.input.readObject());
-		ReadingOtherPlayer reader = new ReadingOtherPlayer(this);
-		reader.start();
+		
+		ReadingOtherPlayer t = new ReadingOtherPlayer(this);
+		t.start();
 	}
 
 	private void joinPlay() throws UnknownHostException, IOException, ClassNotFoundException {
@@ -242,8 +243,9 @@ public class ViewGUI extends JFrame {
 		this.setGame((Game) this.input.readObject());
 		this.game.joinPlayer(this.whoAmI);
 		this.output.writeObject(this.game);
-		ReadingOtherPlayer reader = new ReadingOtherPlayer(this);
-		reader.start();
+		
+		ReadingOtherPlayer t = new ReadingOtherPlayer(this);
+		t.start();
 	}
 
 	private void setClient() throws UnknownHostException, IOException {
@@ -281,42 +283,28 @@ public class ViewGUI extends JFrame {
 	private boolean isMyTurn() {return game.getTurnOwnerInt() == whoAmI;}
 	private boolean itsMe() {return game.getWinner().getWhoAmI() == whoAmI;}
 
-	public void initiateTurn() throws ClassNotFoundException, IOException {
+	private void initiateTurn() throws ClassNotFoundException, IOException {
 		turnOwner = this.game.getTurnOwnerPlayer();
 		color = turnOwner.getColor();
 
 		this.updateStatus("Turn owner: " + color);
-		
-		System.out.println(7.1);
+		contentPane.repaint();
 
 		if (this.isMyTurn()) {
 			this.updateStatus("It's your turn");
 			this.enableDice();
-			
-			System.out.println(7.1 + " a");
 		}
-		else {
-			System.out.println(7.1 + " b.1");
-			this.updateStatus("Waiting for " + color + "...");
-			
-			this.setGame((Game) this.input.readObject());
-			this.updateStatus(this.game.getStatus());
-			
-			System.out.println(7.1 + " b.2");
+		else this.updateStatus("Waiting for " + this.color + "...");
+	}
+	
+	public void updateTurn() throws ClassNotFoundException, IOException {
+		this.updateStatus(this.game.getStatus());
 
-			newPosition = this.game.getCurrentMove();
-			
-			if (newPosition == -1) {
-				this.updateStatus("Finish");
-			}
-			else {
-				if (newPosition > 0) {
-					if (color.equals("red")) move(pane_redPiece);
-					else move(pane_greenPiece);
-				}
-				initiateTurn();					
-			}
-		}
+		this.newPosition = this.game.getCurrentMove();
+		
+		if (this.newPosition != 0) this.movePiece();
+		
+		if (!this.game.isFinish()) this.initiateTurn();
 	}
 
 	private void rollDice() {
@@ -348,34 +336,19 @@ public class ViewGUI extends JFrame {
 		default: 
 			status = "moves to " + newPosition;
 			updateStatus("Your piece " + status);
-
-			if (color.equals("red")) move(pane_redPiece);
-			else move(pane_greenPiece);
-
 			break;
 		}
 
-		System.out.println(1);
 		disableButtons();
-
-		System.out.println(2);
+		
+		if (newPosition != 0) this.movePiece();
+		
 		if (newPosition != -1) {
-			System.out.println(3);
 			game.setStatus(color + " has taken " + dice + ": " + status);
-			
-			System.out.println(4);
 			game.switchOwner();
-			
-			System.out.println(5);
 			game.setCurrentMove(newPosition);
-			
-			System.out.println(6);
 			output.writeObject(game);
-			
-			System.out.println(7);
 			initiateTurn();
-			
-			System.out.println(8);
 		}
 		else {
 			game.setStatus(color + " has won the game");
@@ -387,24 +360,29 @@ public class ViewGUI extends JFrame {
 	public void updateStatus(String status) {
 		textArea_status.setText(textArea_status.getText() + status + "\n");
 	}
-
-	public void movePiece() {
-		if (this.color.equals("red")) this.move(this.pane_redPiece);
-		else this.move(this.pane_greenPiece);
-	}
 	
+	public void movePiece() {
+		if (color.equals("red")) move(pane_redPiece);
+		else move(pane_greenPiece);
+	}
+
 	private void move(JPanel pane_piece) {
-		if (newPosition<21) {
-			pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY() + 30 * (newPosition - 1));			
+		int position;
+		
+		if (!game.isFinish()) position = newPosition;
+		else position = game.getWinner().getStartingBox();
+		
+		if (position<21) {
+			pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY() + 30 * (position - 1));			
 		}
-		else if (newPosition<41) {
-			pane_piece.setLocation((int)referenciaCasillas21A40.getX() + 29 * (newPosition - 21), (int)referenciaCasillas21A40.getY());
+		else if (position<41) {
+			pane_piece.setLocation((int)referenciaCasillas21A40.getX() + 29 * (position - 21), (int)referenciaCasillas21A40.getY());
 		}
-		else if (newPosition<61) {
-			pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY() - 29 * (newPosition - 41));
+		else if (position<61) {
+			pane_piece.setLocation((int)referenciaCasillas41A60.getX(), (int)referenciaCasillas41A60.getY() - 29 * (position - 41));
 		}
-		else if (newPosition<81) {
-			pane_piece.setLocation((int)referenciaCasillas61A80.getX() - 29 * (newPosition - 61), (int)referenciaCasillas61A80.getY());
+		else if (position<81) {
+			pane_piece.setLocation((int)referenciaCasillas61A80.getX() - 29 * (position - 61), (int)referenciaCasillas61A80.getY());
 		}
 	}
 }
