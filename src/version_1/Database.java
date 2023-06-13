@@ -233,7 +233,7 @@ public class Database {
 	public static String[][] savingDatabasePlayerInto2DArray () {
 		Database myDatabase = new Database();
 		connectionToDatabase(myDatabase);
-		String [][] arrayData; 
+		String [][] arrayData = new String [howManyPlayersInDatabase()][3];
 		
 		try {
 			System.out.println("connected. Adding usernames to 2D Array");
@@ -242,13 +242,16 @@ public class Database {
 			PreparedStatement statement = myDatabase.connection.prepareStatement(query);
 			ResultSet rs = statement.executeQuery();
 
+			int count = 0;
 			while (rs.next()) {
 				String usernameToAdd = rs.getString("username");
-				String wonGamesToAdd = rs.getString("wonGames");
+				String wonGamesToAdd =  rs.getString("wonGames");
 				String playedGamesToAdd = rs.getString("playedGames");
-				arrayData[][0]=usernameToAdd;
-				arrayData[][1]=wonGamesToAdd;
-				arrayData[][2]=playedGamestoAdd;
+				arrayData[count][0]=usernameToAdd;
+				arrayData[count][1]=wonGamesToAdd;
+				arrayData[count][2]=playedGamesToAdd;
+				
+				count++;
 			}
 		} catch (Exception e) { 
 			e.printStackTrace();
