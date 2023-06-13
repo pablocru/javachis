@@ -8,14 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
 public class Database {
 	private ArrayList<String> usernameArray = new ArrayList<>();
 	private Connection connection;
-
-
-	public Database() {
-	}
 
 	public ArrayList<String> getUsernameArray() {
 		return usernameArray;
@@ -26,7 +21,7 @@ public class Database {
 	}
 	
 	public static void connectionToDatabase (Database exampleDatabase) {
-		String url="jdbc:mysql://localhost:4306/javachis"+ ""; 
+		String url="jdbc:mysql://localhost:33306/javachis"; 
 		//user of the database: root is selected
 		String user="root";
 		//password is alumnoalumno
@@ -35,7 +30,7 @@ public class Database {
 		//starting connection
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			exampleDatabase.connection=DriverManager.getConnection(url,user,password); 
+			exampleDatabase.connection = DriverManager.getConnection(url,user,password);
 		} catch (Exception e) { 
 			e.printStackTrace();
 		} 
@@ -52,8 +47,8 @@ public class Database {
 
 		//if the player is in the array list, there is an update. If not, an insertion.
 		if (isPlayerInArrayList(myDatabase, player)) {
-			updatingDatabase (myDatabase,player,didIWin);
-		}else  insertingPlayerInDatabase (myDatabase,player,didIWin);
+			updatingDatabase (myDatabase,player, didIWin);
+		}else insertingPlayerInDatabase (myDatabase, player,didIWin);
 
 		//if wanting to show the usernames stored in our database:
 		//showingDatabaseUsernames(myDatabase);
@@ -222,14 +217,14 @@ public class Database {
 		}
 		return playedGames;
 	}
-	public static void showDataForInterface () {
-		//este metodo puede que sobre
-		//el metodo no pide nada
-		//Hago un overloadign de savingUsernames into an arrayList 
-		//devuelvo el arraylist
-		//en el boton, por username, se crean 3 paneles fijados en el eje x, que van variando en el eje y (cuando haya un jugador mas)
-		//en esos paneles, se pone el username, el wonGames y el playedGames
-	}
+//	public static void showDataForInterface () {
+//		//este metodo puede que sobre
+//		//el metodo no pide nada
+//		//Hago un overloadign de savingUsernames into an arrayList 
+//		//devuelvo el arraylist
+//		//en el boton, por username, se crean 3 paneles fijados en el eje x, que van variando en el eje y (cuando haya un jugador mas)
+//		//en esos paneles, se pone el username, el wonGames y el playedGames
+//	}
 	public static String[][] savingDatabasePlayerInto2DArray () {
 		Database myDatabase = new Database();
 		connectionToDatabase(myDatabase);
