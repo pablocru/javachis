@@ -62,8 +62,8 @@ public class Game implements Serializable {
 	public int getCurrentMove() {return this.currentMove;}
 
 	//	Methods
-	public void joinPlayer(int whoAmI) {
-		players[whoAmI] = new Player("Player", whoAmI);
+	public void joinPlayer(String username, int whoAmI) {
+		players[whoAmI] = new Player(username, whoAmI);
 	}
 
 	private void createBoxes() {
