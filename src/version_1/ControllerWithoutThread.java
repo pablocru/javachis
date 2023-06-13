@@ -93,7 +93,7 @@ public class ControllerWithoutThread {
 			case 1:
 				parchis.whoAmI = 0;
 				parchis.game = new Game(2);
-				parchis.game.joinPlayer(parchis.whoAmI);
+				parchis.game.joinPlayer("Player 1", parchis.whoAmI);
 				parchis.setServer();
 				parchis.output.writeObject(parchis.game);
 				parchis.setGame((Game) parchis.input.readObject());
@@ -102,7 +102,7 @@ public class ControllerWithoutThread {
 				parchis.whoAmI = 1;
 				parchis.setClient();
 				parchis.setGame((Game) parchis.input.readObject());
-				parchis.game.joinPlayer(parchis.whoAmI);
+				parchis.game.joinPlayer("Player 2", parchis.whoAmI);
 				parchis.output.writeObject(parchis.game);
 				break;
 			case 0: 

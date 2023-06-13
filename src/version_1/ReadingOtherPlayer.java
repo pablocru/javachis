@@ -18,7 +18,7 @@ public class ReadingOtherPlayer extends Thread {
 		try {
 			boolean lock = true;
 
-			ObjectInputStream oI =parchis.getInput();
+			ObjectInputStream oI = parchis.getInput();
 			while(lock) {
 				Object ob = oI.readObject();
 
@@ -27,7 +27,7 @@ public class ReadingOtherPlayer extends Thread {
 					
 					parchis.updateTurn();
 				}
-				else lock = false;	
+				else lock = false;
 			}
 		} 
 		catch (IOException e) {
