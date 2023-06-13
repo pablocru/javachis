@@ -113,7 +113,7 @@ public class Controller {
 				System.out.println("Turn owner: " + color);
 				if (parchis.game.getTurnOwnerInt() == parchis.whoAmI) {
 					
-					parchis.game.rollDice();
+					parchis.game.rollCheatDice();
 					System.out.println(parchis.game.getDice());
 					if (parchis.game.getTurnOwnerPlayer().isAnyoneHome()) {
 						if (parchis.game.getDice() == 5) {
