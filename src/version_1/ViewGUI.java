@@ -51,16 +51,13 @@ public class ViewGUI extends JFrame {
 	private JLabel lbl_imageDice = new JLabel("");
 	private JScrollPane scrollPane = new JScrollPane();
 	private JTextArea textArea_status = new JTextArea();
-	private int casillaRojo;
-	private int casillaVerde;
-	private int mueveFichas;
 
 	//	Connection
 	private Socket socket;
 	private ServerSocket server;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
-	private final int PORT = 5005;
+	private final int PORT = 4306; //pc clase pablo: 4306; pc otro (que no se cual es): 5005; portatil MA: 33306
 	private final String IP = "127.0.0.1";
 
 	//	Parchis
@@ -73,11 +70,18 @@ public class ViewGUI extends JFrame {
 	private Player turnOwner;
 	private int newPosition;
 	private String status;
+	
+	//Setters
+	public void setGame(Game game) {this.game = game;}
+	
+	public void setNewPosition(int newPosition) {this.newPosition = newPosition;}
+
+	// Getters
+	public String getColor() {return this.color;}
+	
+	public ObjectInputStream getInput() {return this.input;}
 
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -228,6 +232,8 @@ public class ViewGUI extends JFrame {
 		this.setServer();
 		this.output.writeObject(this.game);
 		this.setGame((Game) this.input.readObject());
+		ReadingOtherPlayer reader = new ReadingOtherPlayer(this);
+		reader.start();
 	}
 
 	private void joinPlay() throws UnknownHostException, IOException, ClassNotFoundException {
@@ -236,6 +242,8 @@ public class ViewGUI extends JFrame {
 		this.setGame((Game) this.input.readObject());
 		this.game.joinPlayer(this.whoAmI);
 		this.output.writeObject(this.game);
+		ReadingOtherPlayer reader = new ReadingOtherPlayer(this);
+		reader.start();
 	}
 
 	private void setClient() throws UnknownHostException, IOException {
@@ -266,8 +274,6 @@ public class ViewGUI extends JFrame {
 		output = new ObjectOutputStream(socket.getOutputStream());
 	}
 
-	private void setGame(Game game) {this.game = game;}
-
 	private void messageDialog(String cta, String windowTitle) {
 		JOptionPane.showMessageDialog(contentPane, cta, windowTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -275,7 +281,7 @@ public class ViewGUI extends JFrame {
 	private boolean isMyTurn() {return game.getTurnOwnerInt() == whoAmI;}
 	private boolean itsMe() {return game.getWinner().getWhoAmI() == whoAmI;}
 
-	private void initiateTurn() throws ClassNotFoundException, IOException {
+	public void initiateTurn() throws ClassNotFoundException, IOException {
 		turnOwner = this.game.getTurnOwnerPlayer();
 		color = turnOwner.getColor();
 
@@ -299,11 +305,17 @@ public class ViewGUI extends JFrame {
 			System.out.println(7.1 + " b.2");
 
 			newPosition = this.game.getCurrentMove();
-			if (newPosition != 0) {
-				if (color.equals("red")) move(pane_redPiece);
-				else move(pane_greenPiece);
+			
+			if (newPosition == -1) {
+				this.updateStatus("Finish");
 			}
-			initiateTurn();
+			else {
+				if (newPosition > 0) {
+					if (color.equals("red")) move(pane_redPiece);
+					else move(pane_greenPiece);
+				}
+				initiateTurn();					
+			}
 		}
 	}
 
@@ -358,7 +370,6 @@ public class ViewGUI extends JFrame {
 			game.setCurrentMove(newPosition);
 			
 			System.out.println(6);
-			contentPane.repaint();
 			output.writeObject(game);
 			
 			System.out.println(7);
@@ -373,10 +384,15 @@ public class ViewGUI extends JFrame {
 		}
 	}
 
-	private void updateStatus(String status) {
+	public void updateStatus(String status) {
 		textArea_status.setText(textArea_status.getText() + status + "\n");
 	}
 
+	public void movePiece() {
+		if (this.color.equals("red")) this.move(this.pane_redPiece);
+		else this.move(this.pane_greenPiece);
+	}
+	
 	private void move(JPanel pane_piece) {
 		if (newPosition<21) {
 			pane_piece.setLocation((int)referenciaCasillas1A20.getX(), (int)referenciaCasillas1A20.getY() + 30 * (newPosition - 1));			

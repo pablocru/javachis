@@ -1,18 +1,14 @@
 package version_1;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
-/**
- * This class extends Thread, and it has 3 attributes: an input, a socket and a server
- * @author migguavil
- *
- */
 public class ReadingOtherPlayer extends Thread {
 	//	Attributes
-	private Controller parchis;
+	private ViewGUI parchis;
 
 	//	Constructor
-	public ReadingOtherPlayer(Controller parchis) {
+	public ReadingOtherPlayer(ViewGUI parchis) {
 		this.parchis = parchis;
 	}
 
@@ -22,14 +18,22 @@ public class ReadingOtherPlayer extends Thread {
 		try {
 			boolean lock = true;
 
+			ObjectInputStream oI = parchis.getInput();
 			while(lock) {
-				System.out.println("Esperando...");
-				Object ob = parchis.getInput().readObject();
-				System.out.println("Leido");
-				
+				parchis.updateStatus("Waiting for " + parchis.getColor() + "...");
+				Object ob = oI.readObject();
+
 				if (ob instanceof Game) {
 					Game game = (Game) ob;
 					parchis.setGame(game);
+					
+					parchis.updateStatus(game.getStatus());
+
+					int newPosition = game.getCurrentMove();
+					if (newPosition != 0) {
+						parchis.movePiece();
+					}
+					parchis.initiateTurn();
 				}
 				else lock = false;	
 			}
