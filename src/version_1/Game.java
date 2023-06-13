@@ -73,8 +73,22 @@ public class Game implements Serializable {
 			boxes[i]=new Box(i);
 	}
 	
-	public int rollDice() {
-		int dice = r.nextInt(1, 7);
+	public int rollCheatDice() {
+		Random r = new Random ();
+		int dice;
+		int a = r.nextInt(1,4);
+		int b = r.nextInt(1,5);
+		int c = r.nextInt(5,7);
+		
+		if (a==1) {
+			dice = b;
+		}else dice = c;
+				
+		return dice;
+	}
+	
+	public int rollRegularDice() {
+int dice = r.nextInt(1, 7);
 		
 		this.dice = dice;
 		
