@@ -59,6 +59,7 @@ public class ViewGUI extends JFrame {
 	private ObjectInputStream input;
 	private final int PORT = 5005;
 	private final String IP = "127.0.0.1";
+	private ReadingOtherPlayer reader;
 
 	//	Parchis
 	private Game game;
@@ -227,8 +228,8 @@ public class ViewGUI extends JFrame {
 		this.output.writeObject(this.game);
 		this.setGame((Game) this.input.readObject());
 
-		ReadingOtherPlayer t = new ReadingOtherPlayer(this);
-		t.start();
+		reader = new ReadingOtherPlayer(this);
+		reader.start();
 	}
 
 	private void joinPlay() throws UnknownHostException, IOException, ClassNotFoundException {
@@ -238,8 +239,8 @@ public class ViewGUI extends JFrame {
 		this.game.joinPlayer(inputUsername(), this.whoAmI);
 		this.output.writeObject(this.game);
 
-		ReadingOtherPlayer t = new ReadingOtherPlayer(this);
-		t.start();
+		reader = new ReadingOtherPlayer(this);
+		reader.start();
 	}
 
 	private void setClient() throws UnknownHostException, IOException {
@@ -400,5 +401,15 @@ public class ViewGUI extends JFrame {
 		}
 		pane_initial.setVisible(true);
 		StatisticWindowGUI.main(null);
+		
+		try {
+			reader.interrupt();
+			output.close();
+			input.close();
+			socket.close();
+			if (server != null) server.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

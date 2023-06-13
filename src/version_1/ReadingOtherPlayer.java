@@ -19,7 +19,7 @@ public class ReadingOtherPlayer extends Thread {
 			boolean lock = true;
 
 			ObjectInputStream oI = parchis.getInput();
-			while(lock) {
+			while(lock && !Thread.currentThread().isInterrupted()) {
 				Object ob = oI.readObject();
 
 				if (ob instanceof Game) {
