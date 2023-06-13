@@ -391,6 +391,12 @@ public class ViewGUI extends JFrame {
 			for (Player player : game.getPlayers()) {
 				Database.executeDatabase(player, game.getWinner().equals(player));
 			}
+		} else {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}			
 		}
 		pane_initial.setVisible(true);
 		StatisticWindowGUI.main(null);
