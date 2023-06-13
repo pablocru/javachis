@@ -187,6 +187,11 @@ public class ViewGUI extends JFrame {
 		btn_exit.setBounds(636, 339, 110, 25);
 		
 		JButton btn_data = new JButton("Statistics");
+		btn_data.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btn_data.setBounds(636, 304, 110, 25);
 		pane_initial.add(btn_data);
 		btn_exit.addActionListener(new ActionListener() {
@@ -323,7 +328,7 @@ public class ViewGUI extends JFrame {
 	}
 
 	private void rollDice() {
-		dice = game.rollDice();
+		dice = game.rollCheatDice();
 		lbl_imageDice.setIcon(new ImageIcon(ViewGUI.class.getResource("../img/dice" + dice + ".png")));
 		updateStatus("Rolling dice... " + dice + "!!");
 		enableMove();
