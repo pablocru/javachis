@@ -1,5 +1,6 @@
 package version_1;
 
+<<<<<<< HEAD
 import java.util.Random;
 
 public class TestingDatabase {
@@ -36,6 +37,15 @@ public class TestingDatabase {
 		}else dice = c;
 				
 		return dice;
+=======
+public class TestingDatabase {
+
+	public static void main(String[] args) {
+		Player Dani = new Player ("Dani", 0);
+		boolean didIWin = true;
+		Database.executeDatabase(Dani, didIWin);
+
+>>>>>>> branch 'main' of https://github.com/pabcrudel/javachis.git
 	}
 
 }
