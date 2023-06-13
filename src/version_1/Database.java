@@ -24,12 +24,8 @@ public class Database {
 	public void setUsernameArray(ArrayList<String> usernameArray) {
 		this.usernameArray = usernameArray;
 	}
-
-	public static void executeDatabase (Player player, boolean didIWin) {
-		//It creates a database
-		Database myDatabase = new Database();
-
-		//url of the database: javachis is the DB name
+	
+	public static void connectionToDatabase (Database exampleDatabase) {
 		String url="jdbc:mysql://localhost:4306/javachis"+ ""; 
 		//user of the database: root is selected
 		String user="root";
@@ -39,11 +35,18 @@ public class Database {
 		//starting connection
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			myDatabase.connection=DriverManager.getConnection(url,user,password); 
+			exampleDatabase.connection=DriverManager.getConnection(url,user,password); 
 		} catch (Exception e) { 
 			e.printStackTrace();
 		} 
+	}
 
+	public static void executeDatabase (Player player, boolean didIWin) {
+		//It creates a database
+		Database myDatabase = new Database();
+		
+		connectionToDatabase(myDatabase);
+		
 		//First of all: saving database usernames (primary keys) into an array
 		savingUsernamesIntoAnArray(myDatabase);
 
@@ -219,4 +222,62 @@ public class Database {
 		}
 		return playedGames;
 	}
+	public static void showDataForInterface () {
+		//este metodo puede que sobre
+		//el metodo no pide nada
+		//Hago un overloadign de savingUsernames into an arrayList 
+		//devuelvo el arraylist
+		//en el boton, por username, se crean 3 paneles fijados en el eje x, que van variando en el eje y (cuando haya un jugador mas)
+		//en esos paneles, se pone el username, el wonGames y el playedGames
+	}
+	public static String[][] savingDatabasePlayerInto2DArray () {
+		Database myDatabase = new Database();
+		connectionToDatabase(myDatabase);
+		String [][] arrayData; 
+		
+		try {
+			System.out.println("connected. Adding usernames to 2D Array");
+
+			String query="SELECT username, wonGames, playedGames FROM resultsTable";
+			PreparedStatement statement = myDatabase.connection.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+
+			while (rs.next()) {
+				String usernameToAdd = rs.getString("username");
+				String wonGamesToAdd = rs.getString("wonGames");
+				String playedGamesToAdd = rs.getString("playedGames");
+				arrayData[][0]=usernameToAdd;
+				arrayData[][1]=wonGamesToAdd;
+				arrayData[][2]=playedGamestoAdd;
+			}
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}
+		
+		return arrayData;
+		
+	}
+	public static int howManyPlayersInDatabase () {
+		Database myDatabase = new Database();
+		connectionToDatabase(myDatabase);
+		int howManyPlayers=0;
+		
+		try {
+			System.out.println("connected. Counting usernames in the Database");
+
+			String query="SELECT COUNT(username) AS howMany FROM resultsTable";
+			PreparedStatement statement = myDatabase.connection.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+
+			while (rs.next()) {
+				howManyPlayers  = rs.getInt("howMany");
+			}
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}
+		
+		return howManyPlayers;
+		
+	}
+	
 }
