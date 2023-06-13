@@ -280,15 +280,23 @@ public class ViewGUI extends JFrame {
 		color = turnOwner.getColor();
 
 		this.updateStatus("Turn owner: " + color);
+		
+		System.out.println(7.1);
 
 		if (this.isMyTurn()) {
 			this.updateStatus("It's your turn");
 			this.enableDice();
+			
+			System.out.println(7.1 + " a");
 		}
 		else {
+			System.out.println(7.1 + " b.1");
 			this.updateStatus("Waiting for " + color + "...");
+			
 			this.setGame((Game) this.input.readObject());
 			this.updateStatus(this.game.getStatus());
+			
+			System.out.println(7.1 + " b.2");
 
 			newPosition = this.game.getCurrentMove();
 			if (newPosition != 0) {
@@ -335,14 +343,28 @@ public class ViewGUI extends JFrame {
 			break;
 		}
 
+		System.out.println(1);
 		disableButtons();
 
+		System.out.println(2);
 		if (newPosition != -1) {
+			System.out.println(3);
 			game.setStatus(color + " has taken " + dice + ": " + status);
+			
+			System.out.println(4);
 			game.switchOwner();
+			
+			System.out.println(5);
 			game.setCurrentMove(newPosition);
+			
+			System.out.println(6);
+			contentPane.repaint();
 			output.writeObject(game);
+			
+			System.out.println(7);
 			initiateTurn();
+			
+			System.out.println(8);
 		}
 		else {
 			game.setStatus(color + " has won the game");
