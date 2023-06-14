@@ -400,6 +400,7 @@ public class ViewGUI extends JFrame {
 			}			
 		}
 		pane_initial.setVisible(true);
+		textArea_status.setText("");
 		StatisticWindowGUI.main(null);
 		
 		try {
